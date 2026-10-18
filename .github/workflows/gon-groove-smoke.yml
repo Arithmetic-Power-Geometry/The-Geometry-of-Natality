@@ -1,0 +1,64 @@
+name: GoN GROOVE executable smoke test
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/gon-groove-smoke.yml'
+jobs:
+  groove-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Download official GROOVE release asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,urllib.request
+          u='https://api.github.com/repos/nl-utwente-groove/code/releases/latest'
+          req=urllib.request.Request(u,headers={'Accept':'application/vnd.github+json','User-Agent':'GoN-baseline-smoke'})
+          with urllib.request.urlopen(req,timeout=30) as response:
+              data=json.load(response)
+          assets=[a for a in data['assets'] if a['name'].endswith('-bin.zip') and 'doc' not in a['name']]
+          if len(assets)!=1:
+              raise SystemExit(f'Expected exactly one official binary ZIP; found {len(assets)}')
+          print('GROOVE release:',data['tag_name'],'asset:',assets[0]['name'])
+          with open('groove-release-metadata.json','w') as f:
+              json.dump({'tag':data['tag_name'],'asset':assets[0]['name'],'asset_url':assets[0]['browser_download_url']},f,indent=2)
+          urllib.request.urlretrieve(assets[0]['browser_download_url'],'groove-bin.zip')
+          PY
+          sha256sum groove-bin.zip | tee groove-sha256.txt
+          unzip -q groove-bin.zip -d groove-unpacked
+      - name: Execute official Generator help
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t jars < <(find groove-unpacked -type f -name Generator.jar)
+          if [ "${#jars[@]}" -ne 1 ]; then
+            echo "Expected one Generator.jar, found ${#jars[@]}" >&2
+            exit 1
+          fi
+          java -version 2>&1 | tee java-version.log
+          java -jar "${jars[0]}" -h > generator-help.log 2>&1 || {
+            cat generator-help.log
+            exit 1
+          }
+          test -s generator-help.log
+          echo "Official Generator -h executed successfully" | tee smoke-status.txt
+      - name: Upload evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-groove-smoke-evidence
+          path: |
+            groove-release-metadata.json
+            groove-sha256.txt
+            java-version.log
+            generator-help.log
+            smoke-status.txt
+          if-no-files-found: warn
