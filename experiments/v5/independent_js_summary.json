@@ -1,0 +1,17 @@
+{
+  "instances": 150,
+  "exact_matches": 150,
+  "failed_matches": 0,
+  "sizes": [
+    6,
+    8,
+    10,
+    12,
+    14,
+    16
+  ],
+  "seeds_per_size": 25,
+  "runner": "JavaScript independent deterministic LCG; not identical RNG to Python benchmark.py",
+  "timing_comparison": "Not measured",
+  "novelty": "No novel speedup established"
+}
