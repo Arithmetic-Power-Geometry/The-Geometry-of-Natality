@@ -1,0 +1,12 @@
+{
+  "graphs": 4164,
+  "constructive_signatures_checked": 42180,
+  "all_passed": true,
+  "n_counts": {
+    "2": 4,
+    "3": 64,
+    "4": 4096
+  },
+  "closed_subset_count": 7030,
+  "scope": "constructive sufficiency; novelty not established"
+}
