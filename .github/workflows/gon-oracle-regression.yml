@@ -1,0 +1,26 @@
+name: GoN independent-oracle regression
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'applications/workflow_repair/**'
+      - '.github/workflows/gon-oracle-regression.yml'
+jobs:
+  exact-repair-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compare independent exact solvers
+        run: |
+          python applications/workflow_repair/compare_independent_oracles.py | tee gon-oracle-comparison.json
+      - name: Upload independent comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-independent-oracle-evidence
+          path: gon-oracle-comparison.json
+          if-no-files-found: warn
