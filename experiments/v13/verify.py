@@ -13,6 +13,7 @@ def born_patterns(bits,width,n0=1):
     return out,t
 
 def emulate(bits,width,slots,n0=1):
+    if slots<n0:return None,0
     live=[];out=[];t=0
     for bit in bits:
         if bit:
