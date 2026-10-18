@@ -50,6 +50,24 @@ jobs:
           }
           test -s generator-help.log
           echo "Official Generator -h executed successfully" | tee smoke-status.txt
+      - name: Execute official sample grammar with GROOVE Generator
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth 1 https://github.com/nl-utwente-groove/samples.git groove-samples
+          git -C groove-samples rev-parse HEAD | tee groove-samples-commit.txt
+          mapfile -t jars < <(find groove-unpacked -type f -name Generator.jar)
+          test "${#jars[@]}" -eq 1
+          test -d groove-samples/attribute-types.gps
+          # A real grammar invocation; preserve output even if this release
+          # requires extra flags or grammar-specific settings.
+          set +e
+          timeout 120 java -jar "${jars[0]}" groove-samples/attribute-types.gps > groove-sample-generator.log 2>&1
+          status=$?
+          set -e
+          cat groove-sample-generator.log
+          echo "exit_code=$status" | tee groove-sample-status.txt
+          test "$status" -eq 0
       - name: Upload evidence even on failure
         if: always()
         uses: actions/upload-artifact@v4
@@ -61,4 +79,7 @@ jobs:
             java-version.log
             generator-help.log
             smoke-status.txt
+            groove-samples-commit.txt
+            groove-sample-generator.log
+            groove-sample-status.txt
           if-no-files-found: warn
