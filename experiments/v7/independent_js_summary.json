@@ -1,0 +1,15 @@
+{
+  "instances": 200,
+  "exact_matches": 200,
+  "failures": 0,
+  "sizes": [
+    4,
+    6,
+    8,
+    10
+  ],
+  "seeds_per_size": 50,
+  "runner": "independent JavaScript LCG, not same random draws as Python verify.py",
+  "timings": "not measured",
+  "claim": "correctness of classical SCC condensation only"
+}
