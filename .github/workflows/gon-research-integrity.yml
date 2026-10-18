@@ -1,0 +1,26 @@
+name: GoN research integrity gate
+on:
+  push:
+    paths:
+      - 'references.bib'
+      - 'research/check_bib_integrity.py'
+      - 'experiments/research_gate/signature_soundness_counterexample.py'
+      - '.github/workflows/gon-research-integrity.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify bibliography structure and known errors
+        run: python research/check_bib_integrity.py
+      - name: Execute GoN counterexample and retain falsification result
+        run: python experiments/research_gate/signature_soundness_counterexample.py | tee gon_signature_falsification.json
+      - name: Upload counterexample evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-research-integrity-evidence
+          path: gon_signature_falsification.json
