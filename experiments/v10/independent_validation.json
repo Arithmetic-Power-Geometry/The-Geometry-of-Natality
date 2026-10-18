@@ -1,0 +1,10 @@
+{
+  "deterministic_policies_checked": 2,
+  "randomized_grid_points_checked": 101,
+  "randomized_minimax_value": "1/2",
+  "clairvoyant_value": "1",
+  "observation_enabled_value": "1",
+  "failures": 0,
+  "verification": "independent JavaScript arithmetic checker",
+  "novelty": "not established"
+}
