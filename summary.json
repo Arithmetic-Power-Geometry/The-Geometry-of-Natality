@@ -1,0 +1,45 @@
+{
+  "count": 1000,
+  "all_exact_matches": true,
+  "nonzero_gain": 743,
+  "total_fast_seconds": 0.014753,
+  "total_exhaustive_seconds": 0.134495,
+  "families": [
+    {
+      "family": "erdos_renyi",
+      "graphs": 200,
+      "mean_gain": 5.5,
+      "mean_initial": 13.54,
+      "mean_final": 19.04
+    },
+    {
+      "family": "dag",
+      "graphs": 200,
+      "mean_gain": 6.035,
+      "mean_initial": 8.405,
+      "mean_final": 14.44
+    },
+    {
+      "family": "block",
+      "graphs": 200,
+      "mean_gain": 5.675,
+      "mean_initial": 2.77,
+      "mean_final": 8.445
+    },
+    {
+      "family": "chain",
+      "graphs": 200,
+      "mean_gain": 0,
+      "mean_initial": 21,
+      "mean_final": 21
+    },
+    {
+      "family": "scc_blocks",
+      "graphs": 200,
+      "mean_gain": 6.725,
+      "mean_initial": 12.445,
+      "mean_final": 19.17
+    }
+  ],
+  "note": "One observed run. Small graphs. No mathematical novelty established."
+}
