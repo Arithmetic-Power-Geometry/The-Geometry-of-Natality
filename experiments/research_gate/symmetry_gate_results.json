@@ -1,0 +1,103 @@
+{
+  "instances": 16,
+  "failures": 0,
+  "rows": [
+    {
+      "actions": 1,
+      "explicit_states": 2,
+      "count_quotient_states": 2,
+      "compression_ratio": 1
+    },
+    {
+      "actions": 2,
+      "explicit_states": 4,
+      "count_quotient_states": 3,
+      "compression_ratio": 1.3333
+    },
+    {
+      "actions": 3,
+      "explicit_states": 8,
+      "count_quotient_states": 4,
+      "compression_ratio": 2
+    },
+    {
+      "actions": 4,
+      "explicit_states": 16,
+      "count_quotient_states": 5,
+      "compression_ratio": 3.2
+    },
+    {
+      "actions": 5,
+      "explicit_states": 32,
+      "count_quotient_states": 6,
+      "compression_ratio": 5.3333
+    },
+    {
+      "actions": 6,
+      "explicit_states": 64,
+      "count_quotient_states": 7,
+      "compression_ratio": 9.1429
+    },
+    {
+      "actions": 7,
+      "explicit_states": 128,
+      "count_quotient_states": 8,
+      "compression_ratio": 16
+    },
+    {
+      "actions": 8,
+      "explicit_states": 256,
+      "count_quotient_states": 9,
+      "compression_ratio": 28.4444
+    },
+    {
+      "actions": 9,
+      "explicit_states": 512,
+      "count_quotient_states": 10,
+      "compression_ratio": 51.2
+    },
+    {
+      "actions": 10,
+      "explicit_states": 1024,
+      "count_quotient_states": 11,
+      "compression_ratio": 93.0909
+    },
+    {
+      "actions": 11,
+      "explicit_states": 2048,
+      "count_quotient_states": 12,
+      "compression_ratio": 170.6667
+    },
+    {
+      "actions": 12,
+      "explicit_states": 4096,
+      "count_quotient_states": 13,
+      "compression_ratio": 315.0769
+    },
+    {
+      "actions": 13,
+      "explicit_states": 8192,
+      "count_quotient_states": 14,
+      "compression_ratio": 585.1429
+    },
+    {
+      "actions": 14,
+      "explicit_states": 16384,
+      "count_quotient_states": 15,
+      "compression_ratio": 1092.2667
+    },
+    {
+      "actions": 15,
+      "explicit_states": 32768,
+      "count_quotient_states": 16,
+      "compression_ratio": 2048
+    },
+    {
+      "actions": 16,
+      "explicit_states": 65536,
+      "count_quotient_states": 17,
+      "compression_ratio": 3855.0588
+    }
+  ],
+  "finding": "classical count abstraction explains compression; no GoN novelty"
+}
