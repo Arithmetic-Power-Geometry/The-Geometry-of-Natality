@@ -1,0 +1,9 @@
+{
+  "histories_checked": 2047,
+  "capacity_checks": 4094,
+  "max_horizon": 10,
+  "failures": 0,
+  "verification": "independent JavaScript enumeration of finite capacity feasibility",
+  "limitations": "capacity counts only; no performance baseline",
+  "novelty": "not established"
+}
