@@ -62,7 +62,7 @@ jobs:
           # A real grammar invocation; preserve output even if this release
           # requires extra flags or grammar-specific settings.
           set +e
-          timeout 45 java -Xms128m -Xmx1536m -jar "${jars[0]}" groove-samples/attribute-types.gps > groove-sample-generator.log 2>&1
+          timeout 20 java -Xms128m -Xmx1536m -jar "${jars[0]}" groove-samples/attribute-types.gps > groove-sample-generator.log 2>&1
           status=$?
           set -e
           cat groove-sample-generator.log
