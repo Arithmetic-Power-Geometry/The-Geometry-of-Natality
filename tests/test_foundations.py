@@ -35,7 +35,7 @@ class NatalityTests(unittest.TestCase):
             for u,v in base:a[u].add(v)
             r=reach(a,0)
             p1=potential(3,base,1)
-            predicted=max((len(reach(a,v)) for v in range(3) if v not in r),default=0)
+            predicted=max((len(reach(a,v)-r) for v in range(3) if v not in r),default=0)
             self.assertEqual(p1,predicted)
             self.assertLessEqual(p1,3-len(r))
 if __name__=='__main__':unittest.main()
