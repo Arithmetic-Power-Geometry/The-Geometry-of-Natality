@@ -1,0 +1,16 @@
+{
+  "histories_checked": 511,
+  "capacity_checks": 5110,
+  "max_horizon": 8,
+  "widths": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "failures": 0,
+  "checker": "independent JavaScript enumeration",
+  "claim": "active-slot bound under bounded-window observation",
+  "novelty": "not established"
+}
