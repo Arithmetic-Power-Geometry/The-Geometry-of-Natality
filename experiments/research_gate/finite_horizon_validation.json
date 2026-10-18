@@ -1,0 +1,13 @@
+{
+  "horizons_checked": 12,
+  "horizon_range": [
+    0,
+    11
+  ],
+  "witness_horizon": 2,
+  "witness_states": 3,
+  "witness_edges": 2,
+  "failures": 0,
+  "verification": "independent JavaScript finite-horizon trace equivalence",
+  "novelty": "negative gate; not a new theorem"
+}
