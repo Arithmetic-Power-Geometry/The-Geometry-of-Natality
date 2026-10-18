@@ -1,3 +1,5 @@
+> **Research status — 2026-10-18: GoN is NOT Q1-ready. Novelty gate closed.** The V1–V15 sequence and subsequent anti-loop experiments did not establish an original theorem or a competitive algorithm. **No additional numbered versions or elementary capacity/symmetry demonstrations until the blocker in the GitHub research issue is resolved.** The next deliverable must be a reproducible, identity-sensitive, locally constrained generative-planning task with a documented practical application, an explicit reduction/non-reduction comparison against GROOVE and nominal/fresh-register systems, and matched exact baseline evaluation. See [research reset](RESEARCH_RESET_2026-10-18.md) and [evidence matrix](theory/GON_CLAIM_EVIDENCE_MATRIX.md).
+
 # Geometry of Natality — benchmark 001
 
 Reproducible test of single-edge *natality gain*: the number of newly reachable vertices from a fixed source.
