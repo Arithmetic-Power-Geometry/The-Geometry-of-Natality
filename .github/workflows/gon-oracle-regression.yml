@@ -19,6 +19,8 @@ jobs:
           python applications/workflow_repair/compare_independent_oracles.py | tee gon-oracle-comparison.json
       - name: Produce exhaustive GoN optimality certificate
         run: python applications/workflow_repair/optimality_certificate.py
+      - name: Run GoN multi-size exact baseline comparison
+        run: python applications/workflow_repair/scaling_benchmark.py --max-n 4
       - name: Upload independent comparison
         if: always()
         uses: actions/upload-artifact@v4
@@ -27,4 +29,5 @@ jobs:
           path: |
             gon-oracle-comparison.json
             applications/workflow_repair/optimality_certificate.json
+            applications/workflow_repair/scaling_results.json
           if-no-files-found: warn
