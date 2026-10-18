@@ -1,0 +1,7 @@
+{
+  "java_found": true,
+  "generator_jar_found": false,
+  "groove_executed": false,
+  "reason": "No official GROOVE Generator.jar present; no valid baseline execution possible.",
+  "java_version_line": "openjdk version \"21.0.12.1\" 2026-08-18"
+}
