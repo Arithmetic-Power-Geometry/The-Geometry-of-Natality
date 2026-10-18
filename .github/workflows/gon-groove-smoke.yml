@@ -73,6 +73,7 @@ jobs:
             echo "GROOVE sample exploration did not complete; inspect artifact"
           fi
           test -s groove-sample-generator.log
+          if [ "$status" -ne 0 ]; then exit "$status"; fi
       - name: Upload evidence even on failure
         if: always()
         uses: actions/upload-artifact@v4
