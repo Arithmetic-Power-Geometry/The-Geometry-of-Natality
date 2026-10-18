@@ -1,0 +1,54 @@
+{
+  "name": "synthetic-workflow-recovery",
+  "synthetic": true,
+  "budget": 3,
+  "services": [
+    {
+      "id": "ingress",
+      "alive": true
+    },
+    {
+      "id": "auth",
+      "alive": false
+    },
+    {
+      "id": "report",
+      "alive": true
+    }
+  ],
+  "dependencies": [
+    [
+      "report",
+      "auth"
+    ]
+  ],
+  "forbidden_dependencies": [
+    [
+      "ingress",
+      "report"
+    ]
+  ],
+  "actions": [
+    {
+      "id": "restart_auth",
+      "cost": 3,
+      "requires": [],
+      "effect": "restart_auth"
+    },
+    {
+      "id": "create_auth_replacement",
+      "cost": 2,
+      "requires": [],
+      "effect": "create_auth_replacement"
+    },
+    {
+      "id": "rewire_report",
+      "cost": 1,
+      "requires": [
+        "create_auth_replacement"
+      ],
+      "effect": "rewire_report"
+    }
+  ],
+  "goal": "report_usable"
+}
