@@ -23,7 +23,11 @@ def run():
         positive.append(got)
         # s=0, first hub=1, second hub=2; common leaves 3..m+1
         # each action reaches m nodes: hub 1 reaches hub 2 and leaves, and vice versa
-        n=m+2;base={(1,2),(2,1)}|{(1,i) for i in range(3,n)}
+        n=m+1
+        if m==1:
+            n=3;base={(2,1)}
+        else:
+            base={(1,2),(2,1)}|{(1,i) for i in range(3,n)}
         a={(0,1)};b={(0,2)}
         got=synergy(n,base,a,b)
         assert got==-m,(m,got)
