@@ -1,0 +1,8 @@
+{
+  "max_horizon": 10,
+  "action_histories_checked": 2047,
+  "failures": 0,
+  "verification": "independent Python execution in current session",
+  "scope": "finite binary action histories with trace-only observations",
+  "novelty": "not established"
+}
