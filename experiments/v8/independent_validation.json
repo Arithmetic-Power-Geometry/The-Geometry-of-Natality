@@ -1,0 +1,17 @@
+{
+  "positive_constructions": 50,
+  "negative_constructions": 50,
+  "checks": 100,
+  "failures": 0,
+  "positive_range": [
+    1,
+    50
+  ],
+  "negative_range": [
+    -50,
+    -1
+  ],
+  "verification": "Independent JavaScript graph reachability checker",
+  "timing_claim": "none",
+  "novelty": "not established"
+}
