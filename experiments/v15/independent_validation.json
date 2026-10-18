@@ -1,0 +1,40 @@
+{
+  "graphs_enumerated": 4096,
+  "signature_collisions_with_distinct_reachability": 207,
+  "witness_G": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      0
+    ]
+  ],
+  "witness_H": [
+    [
+      0,
+      3
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      1
+    ]
+  ],
+  "root": 0,
+  "reach_G": 3,
+  "reach_H": 2,
+  "same_labelled_degrees": true,
+  "both_DAG_cospectral": true,
+  "failures": 0,
+  "verification": "independent JavaScript exhaustive enumeration",
+  "novelty": "not established"
+}
