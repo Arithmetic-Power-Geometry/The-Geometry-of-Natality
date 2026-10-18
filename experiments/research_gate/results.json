@@ -1,0 +1,13 @@
+{
+  "instances": 120,
+  "oracle_matches_exhaustive": 120,
+  "optimal_better_than_greedy": 24,
+  "ties": 96,
+  "failures": 0,
+  "witness": {
+    "optimal": 6,
+    "greedy": 4
+  },
+  "status": "classical precedence-constrained knapsack; Q1 not achieved",
+  "execution": "local Python standard library"
+}
