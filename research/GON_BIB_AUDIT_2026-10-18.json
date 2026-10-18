@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-18",
+  "bib_entries": 10,
+  "doi_entries": 9,
+  "missing_doi": 1,
+  "duplicate_keys": [],
+  "duplicate_dois": [],
+  "new_entry": "BurchEtAl1992SymbolicModelChecking",
+  "new_entry_publisher_verified": true,
+  "legacy_entries_individually_reverified_this_turn": false,
+  "bibtex_compiler_run": false,
+  "claim": "metadata verified for new entry only; structural regex audit for whole file"
+}
