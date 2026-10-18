@@ -27,11 +27,11 @@ T1 (monotonicity). F subseteq F' implies R_(G+F)(s) subseteq R_(G+F')(s), hence 
 
 C1. 0=P_0<=P_1<=...<=|V|-|R_G(s)|. Proof: T1 and definition of P_k.
 
-T2 (single-edge formula). If u in R_G(s), v not in R_G(s), then g({(u,v)})=|R_G(v)\R_G(s)|=|R_G(v)|. Proof: an augmented path first leaving R_G(s) must use the new edge (u,v); after that it follows old edges. No old path from v can reach R_G(s) and then escape to another previously unreachable vertex (otherwise that vertex would already be reachable from s). Thus the new vertices are exactly R_G(v).
+T2 (single-edge formula). If u in R_G(s), v not in R_G(s), then g({(u,v)})=|R_G(v)\R_G(s)|(which need not equal |R_G(v)|). Proof: an augmented path first leaving R_G(s) must use the new edge (u,v); after that it follows old edges. An old path from v may enter R_G(s), but any vertices it reaches there were already reachable from s. Thus only R_G(v) outside the original reachable set contributes.
 
-C2. Under unrestricted additions, P_1=max_{v notin R_G(s)}|R_G(v)| when H is nonempty; P_1=0 otherwise. Proof: any useful new edge must leave the originally reachable set and enter its complement; edges elsewhere cannot enlarge reachability with one addition.
+C2. Under unrestricted additions, P_1=max_{v notin R_G(s)}|R_G(v)\\R_G(s)| when H is nonempty; P_1=0 otherwise. Proof: any useful new edge must leave the originally reachable set and enter its complement; edges elsewhere cannot enlarge reachability with one addition.
 
-T3 (budget bound). 0<=P_k<=|H|, and P_k<=k P_1 for unrestricted additions. Proof: take an optimal F, and follow reachable vertices from s in G+F. Every newly reached vertex is reachable from the head of some added edge after a path containing its last added edge. Each such head has original reachability at most P_1, so the new vertices are contained in the union of at most k original reachability sets. (For restricted A this inequality need not hold relative to restricted P_1.)
+T3 (budget bound). 0<=P_k<=|H|, and P_k<=k P_1 for unrestricted additions. Proof: take an optimal F, and follow reachable vertices from s in G+F. Every newly reached vertex is reachable from the head of some added edge after a path containing its last added edge. Each such head has at most P_1 originally unreachable vertices in its original reachability set, so the new vertices are contained in the union of at most k original reachability sets. (For restricted A this inequality need not hold relative to restricted P_1.)
 
 T4 (saturation with unrestricted additions). If H is nonempty, P_|H|=|H|. Proof: add one edge from s to each initially unreachable vertex.
 
