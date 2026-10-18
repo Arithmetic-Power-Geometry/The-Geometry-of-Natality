@@ -17,10 +17,14 @@ jobs:
       - name: Compare independent exact solvers
         run: |
           python applications/workflow_repair/compare_independent_oracles.py | tee gon-oracle-comparison.json
+      - name: Produce exhaustive GoN optimality certificate
+        run: python applications/workflow_repair/optimality_certificate.py
       - name: Upload independent comparison
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: gon-independent-oracle-evidence
-          path: gon-oracle-comparison.json
+          path: |
+            gon-oracle-comparison.json
+            applications/workflow_repair/optimality_certificate.json
           if-no-files-found: warn
