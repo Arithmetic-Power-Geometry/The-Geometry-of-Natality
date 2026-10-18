@@ -1,0 +1,17 @@
+{
+  "capacities": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "max_horizon": 8,
+  "histories_checked": 3577,
+  "exact_matches_or_separations_checked": 3577,
+  "failures": 0,
+  "verification": "independent JavaScript exhaustive binary histories",
+  "novelty": "not established"
+}
