@@ -50,7 +50,7 @@ jobs:
           }
           test -s generator-help.log
           echo "Official Generator -h executed successfully" | tee smoke-status.txt
-      - name: Execute official sample grammar with GROOVE Generator
+      - name: Verify official GROOVE sample grammar parses and executes
         shell: bash
         run: |
           set -euo pipefail
@@ -59,21 +59,17 @@ jobs:
           mapfile -t jars < <(find groove-unpacked -type f -name Generator.jar)
           test "${#jars[@]}" -eq 1
           test -d groove-samples/attribute-types.gps
-          # A real grammar invocation; preserve output even if this release
-          # requires extra flags or grammar-specific settings.
           set +e
-          timeout 20 java -Xms128m -Xmx1536m -jar "${jars[0]}" groove-samples/attribute-types.gps > groove-sample-generator.log 2>&1
+          timeout 15 java -Xms128m -Xmx1024m -jar "${jars[0]}" groove-samples/attribute-types.gps > groove-sample-generator.log 2>&1
           status=$?
           set -e
           cat groove-sample-generator.log
           echo "exit_code=$status" | tee groove-sample-status.txt
-          # This is a diagnostic workload: heap exhaustion or timeout is recorded
-          # as evidence, not misrepresented as a successful exploration.
-          if [ "$status" -ne 0 ]; then
-            echo "GROOVE sample exploration did not complete; inspect artifact"
-          fi
           test -s groove-sample-generator.log
-          if [ "$status" -ne 0 ]; then exit "$status"; fi
+          if [ "$status" -ne 0 ]; then
+            echo "GROOVE exploration failed: no benchmark claim is valid" >&2
+            exit 1
+          fi
       - name: Upload evidence even on failure
         if: always()
         uses: actions/upload-artifact@v4
