@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-18",
+  "entries": 12,
+  "doi_fields": 11,
+  "entries_without_doi": 1,
+  "duplicate_keys": [],
+  "duplicate_dois": [],
+  "verified_new_entries": [
+    "EmersonWahl2005CounterAbstraction",
+    "FernandezGabbay2005NominalGeneration"
+  ],
+  "legacy_entries_individually_verified_in_this_turn": false,
+  "full_bibtex_compilation_executed": false,
+  "q1_ready": false
+}
