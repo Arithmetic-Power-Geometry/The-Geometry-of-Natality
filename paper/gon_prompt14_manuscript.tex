@@ -1,0 +1,68 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,hyperref,longtable}
+\title{The Geometry of Natality: Audited Finite Repair Planning and Dynamic Graph Rewriting}
+\author{Research-stage reconstruction; author metadata pending}
+\date{19 October 2026}
+\begin{document}\maketitle
+\begin{abstract}
+We reconstruct the evidence-bounded core of creation-enabled finite dependency repair and distinguish conditional proofs from unsupported general graph-rewriting assertions. A 72-instance frozen synthetic benchmark includes 36 matched comparisons and 36 refusal controls; a resource-limited 1,440-trial rerun found quotient search slower on the small tested instances. Restricted static creation grammars agreed with an external HiGHS mixed-integer solver in 4,096 models. We extend bounded dynamic creation to inter-relay rewiring, deletion, persistent name history and action-time negative edge guards. Independent native search and NetworkX shortest paths agreed on 320 parameter cells. No original foundational theorem, real-world advantage or matched GROOVE baseline is established.
+\end{abstract}
+\section{Source provenance and audit scope}
+The original working draft \texttt{paper/GoN\_Cost\_Optimal\_Repair\_Planning\_DRAFT.md} describes a finite repair problem, two implemented algorithms, two standard propositions, a synthetic three-service fixture and candidate figures/tables. Earlier review reports describe an original 14-page manuscript with six propositions, four algorithms, four figures, eight tables and 23 references, but the complete corresponding source has not been recovered. Accordingly the present draft cannot claim full original-text or reference-by-reference clearance. It reconstructs independently supported results only.
+\section{Finite-state repair model}
+A planning instance $(S,s_0,A,T,c,F,G,B)$ has finite states, applicable actions, deterministic successors, nonnegative costs, forbidden states, a goal and optional budget. A valid plan follows enabled transitions without entering forbidden states and reaches a goal. Its minimum cost is
+\[
+ C^*=\min_{\pi\text{ feasible}}\sum_{a\in\pi}c(a).
+\]
+For an action-once grammar the state key includes the used-action mask; for persistent allocation it includes used-name history. Algorithm 1 exhaustively replays ordered subsets of distinct actions, with at most $\sum_{j=0}^k k!/(k-j)!$ candidate sequences before pruning. Algorithm 2 is standard Dijkstra uniform-cost search over complete future-relevant state keys. With finite states and nonnegative costs, the first settled goal has optimal cost. These are standard results, not novel GoN algorithms.
+\section{Original fixture, symmetry and decomposition}
+The synthetic ingress/auth/report fixture has auth failed and report depending on auth. Restarting auth costs three; creating auth\_v2 at cost two and rewiring report at cost one also costs three. For independent component products with additive costs and conjunctive goals, projection and concatenation give
+\[
+ C^*=\sum_i C_i^*.
+\]
+Shared restart capacity is a counterexample to applying this formula without independence: unconstrained local total two can rise to global optimum four. Finite orbit quotienting preserves optimal cost only under equivariant action applicability, costs, transitions, forbidden states and goal. Identity-dependent costs break the required equivariance. The implementation certifies only a restricted finite grammar.
+\section{Falsified hypotheses and standard optimization}
+Cheapest-absolute restart is not always optimal. Under a cardinality cap, selecting largest positive savings $d_i=q_i-r_i$ is the standard exchange-optimal rule. Prompt 6 tested 80,973 bounded cells. Prompt 11's relay creation grammar is exactly weighted Set Cover; a greedy cheapest-cover choice can cost two rather than one, and an additional free option need not strictly improve a zero optimum. Independent explicit graph enumeration and subset Dijkstra agreed in 9,261 bounded cases. These are established combinatorial reductions rather than a new foundational theorem.
+\section{Static creation dependencies and external MILP}
+With acyclic prerequisite relation $j\prec i$, relay cover sets $S_i$, capacity $K$ and forbidden pairs, binary variables satisfy
+\begin{align*}
+\min\quad&\sum_i c_i x_i\\
+\sum_{i:t\in S_i}x_i&\ge1 &&(\forall t),\\
+x_i&\le x_j &&(j\prec i),\\
+\sum_i x_i&\le K,\\
+x_a+x_b&\le1 &&((a,b)\text{ forbidden}),\quad x_i\in\{0,1\}.
+\end{align*}
+By induction on acyclic prerequisites, selected relays are root-reachable. Conversely a legal creation plan yields a feasible integer vector. Thus the formulation is exact only for this closed grammar. An external SciPy/HiGHS MILP solver agreed with graph-subset enumeration on 4,096 models; this is not a matched GROOVE baseline.
+\section{Dynamic directed graph rewriting}
+The bounded grammar has finite relay names $N$, live relays $A\subseteq N$, permanently used names $H\subseteq N$ and directed arcs $E\subseteq A\times(A\cup\{t\})$ without self-loops. Relay zero, when live, is connected from root. A terminal goal holds when $t$ is reachable from relay zero through directed arcs. Create$(i)$ requires $i\notin H$, capacity and pairwise live NAC; it inserts $i$ into both $A$ and $H$. Add$(u,v)$ inserts an arc only if the action-time forbidden-edge NAC permits it. Remove$(u,v)$ deletes an arc; Delete$(i)$ removes the relay and its incident arcs but retains $H$. All action costs are nonnegative. This model executes inter-relay edge rewiring, but is not unrestricted graph rewriting.
+\paragraph{Counterexamples.} H1, deletion allows name reuse, is false under persistent $H$. H2, every syntactically available arc may be inserted, is false under an action-time edge NAC. H3, deletion and unlinking can always be pruned even for history-sensitive goals, is false: a goal demanding a name be used but no longer active requires create then delete. The earlier no-delete normalization lemma remains restricted to positive monotone terminal-link goals and downward-closed live guards; it is not valid for arbitrary historical goals.
+\paragraph{Independent baseline.} Native UCS directly generates transitions. A separate enumerator constructs the state graph without calling the native action generator, then NetworkX computes shortest paths. All 320 parameter cells with variable costs, live capacity and negative guards matched exact goal cost, including unreachable cases. NetworkX is an external shortest-path library, not a separate GROOVE rewriting interpreter.
+\section{Benchmark and negative performance evidence}
+The frozen benchmark contains 72 synthetic cases, including 36 matched cells and 36 refusal controls. Prompt 9 reran 1,440 measured paired trials under 60-second subprocess timeouts and 2-GiB virtual address-space limits, with zero censored outcomes.
+\begin{table}[ht]\centering
+\caption{Median of instance-level paired differences (first minus second, milliseconds).}
+\begin{tabular}{lr}\toprule Comparison & Difference\\\midrule
+Plain UCS minus quotient UCS & $-3.851$\\
+Full UCS minus independent decomposition & $+0.743$\\
+Full UCS minus history-local decomposition & $+0.740$\\
+Full UCS minus negative-local decomposition & $+0.427$\\\bottomrule
+\end{tabular}\end{table}
+Quotienting was slower on the tested small symmetry cases. No general speedup or real-network inference follows from these timings.
+\section{Claim-evidence matrix}
+\begin{longtable}{p{0.47\linewidth}p{0.40\linewidth}}\toprule Claim & Verdict\\\midrule\endhead
+Finite UCS correctness & Standard conditional proof and tests.\\
+Independent decomposition & Standard under certified independent footprints.\\
+General graph quotient correctness & Not established; bounded certified grammar only.\\
+Static MILP correspondence & Verified bounded external HiGHS comparison.\\
+Dynamic inter-relay rewrite and action-time NAC & Bounded executable semantics and independent NetworkX oracle.\\
+Original novel structural theorem & Not established.\\
+Matched GROOVE graph grammar & Not implemented.\\
+Original 23-reference independent audit & Incomplete.\\
+Original 6 propositions, 4 figures, 8 tables & Full source not recovered; not reconstructed.\\
+Real-world network traces & Not evaluated.\\\bottomrule\end{longtable}
+\section{Limitations and submission decision}
+The study does not model concurrency, probabilistic failures, unbounded fresh names, full cyclic prerequisites, or unrestricted graph transformation. All instances are synthetic and small. The present reconstruction is a research note, not a complete original-manuscript restoration. The originality, GROOVE and bibliography gates remain open; selective Q1 submission is not recommended.
+\section*{Reproducibility}
+Repository: \href{https://github.com/Arithmetic-Power-Geometry/The-Geometry-of-Natality}{GoN GitHub}; branch \texttt{research/gon-stage1-20261019}. Original benchmark and external solver CI evidence are retained in the Prompt 1--13 research reports. Bibliography entries are not presented as fully verified.
+\end{document}
