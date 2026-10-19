@@ -1,0 +1,32 @@
+name: GoN falsifiable structural conjectures
+on:
+  push:
+    branches:
+      - research/gon-stage1-20261019
+    paths:
+      - 'experiments/research_gate/natality_conjectures.py'
+      - 'tests/test_natality_conjectures.py'
+      - '.github/workflows/gon-conjecture-gate.yml'
+  workflow_dispatch:
+jobs:
+  conjectures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Syntax
+        run: python -m py_compile experiments/research_gate/natality_conjectures.py tests/test_natality_conjectures.py
+      - name: Exhaustive falsification and theorem tests
+        run: python -m unittest discover -s tests -p test_natality_conjectures.py -v
+      - name: Save counterexamples
+        run: python -m experiments.research_gate.natality_conjectures > experiments/research_gate/prompt6_conjecture_evidence.json
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt6-conjecture-evidence
+          path: experiments/research_gate/prompt6_conjecture_evidence.json
+          if-no-files-found: warn
