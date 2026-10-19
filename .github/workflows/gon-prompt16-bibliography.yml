@@ -1,0 +1,24 @@
+name: GoN Prompt 16 Crossref bibliography audit
+on:
+  push:
+    branches: [research/gon-stage1-20261019]
+    paths:
+      - 'experiments/research_gate/audit_bibliography_crossref.py'
+      - 'paper/gon_prompt15_references.bib'
+      - '.github/workflows/gon-prompt16-bibliography.yml'
+  workflow_dispatch:
+jobs:
+  crossref:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Crossref audit all 23 DOI records
+        run: python3 experiments/research_gate/audit_bibliography_crossref.py
+      - name: Upload full audit with unresolved records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt16-crossref-23-record-audit
+          path: research/gon_prompt16_crossref_audit.json
+          if-no-files-found: warn
