@@ -6,6 +6,8 @@ on:
     paths:
       - 'experiments/research_gate/certified_repair_ucs.py'
       - 'tests/test_certified_repair_ucs.py'
+      - 'tests/test_independent_replay.py'
+      - 'experiments/research_gate/independent_replay.py'
       - '.github/workflows/gon-certified-repair-ucs.yml'
   workflow_dispatch:
 jobs:
@@ -18,8 +20,10 @@ jobs:
         with:
           python-version: '3.11'
       - name: Compile sources
-        run: python -m py_compile experiments/research_gate/certified_repair_ucs.py tests/test_certified_repair_ucs.py
+        run: python -m py_compile experiments/research_gate/certified_repair_ucs.py experiments/research_gate/independent_replay.py tests/test_certified_repair_ucs.py tests/test_independent_replay.py
       - name: Run exact planner oracle and adversarial tests
         run: python -m unittest discover -s tests -p test_certified_repair_ucs.py -v
+      - name: Run independent replay checker
+        run: python -m unittest discover -s tests -p test_independent_replay.py -v
       - name: Run representative matched examples
         run: python -m experiments.research_gate.certified_repair_ucs
