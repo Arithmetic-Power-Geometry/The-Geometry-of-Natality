@@ -1,0 +1,30 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,booktabs,hyperref}
+\title{The Geometry of Natality: Evidence-Bounded Finite Repair Planning}
+\author{Research-stage reconstruction}
+\date{19 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+We examine two closed finite repair grammars: one supports name-orbit quotient search only under permutation-invariant weighted semantics, and another supports conservative decomposition only under verified independent action footprints. The frozen benchmark comprises 72 synthetic instances; 36 matched comparison cells and 36 required-refusal controls. A resource-limited 20-repetition rerun completed 1,440 measured trials with zero censored outcomes. Quotient search was slower on the tested small symmetry instances. No novel foundational theorem or real-world superiority is claimed.
+\end{abstract}
+\section{Problem definition and scope}
+A general repair state records components, dependencies, status and relevant history. Applicable deterministic actions have nonnegative costs, and a feasible plan must reach a goal, avoid forbidden configurations and respect a budget. The implementation does not support unrestricted graph rewriting. Its single-service grammar supports create, rewire and restore actions over finite replica identities; identity-sensitive costs and opaque guards forbid quotienting. Its separate multi-component grammar supports local restart, create and rewire operations. Shared capacity, cross edges, shared allocation and global guards forbid decomposition. Cross edges are refusal flags, not executed coupled-graph semantics.
+\section{Conditional correctness}
+Standard Dijkstra uniform-cost search is optimal on a finite nonnegative weighted graph if its state key preserves all future-relevant information. For a finite permutation group preserving action applicability, costs, transitions and goal truth, exact orbit identification preserves optimal cost. The implemented finite orbit certificate is restricted to the closed grammar, not a general proof engine. If the global transition system is an asynchronous product of local systems, all action read/write/guard/allocation footprints are independent, costs are additive and the goal conjunctive, projection and concatenation prove
+\[C^*=\sum_{i=1}^{n}C_i^*.\]
+An external budget B permits a solution iff the sum is at most B. This is standard separability, not a novel theorem.
+\section{Falsified conjectures and standard lemma}
+Shared restart capacity invalidates naive additivity: two components with restart cost 1 and create-plus-rewire cost 3 each have unconstrained optimum sum 2, but at most one restart gives optimum 4. Selecting the lowest absolute restart cost can fail: restart/alternative pairs (1,1) and (2,4), with one restart, give cost 5 if the first is restarted but 3 if the second is restarted. For independent binary choices with at most k restarts, set d_i=q_i-r_i. The optimal cost is
+\[C^*=\sum_iq_i-\sum_{j=1}^{\min(k,m)}d^+_{(j)},\]
+where the latter are the descending positive savings. An exchange argument proves this standard cardinality-greedy lemma, implemented by sorting in O(n log n). Deterministic exhaustive checks covered 80,973 parameter cases.
+\section{Frozen synthetic benchmark}
+The generator version gon-benchmark-v1.0.0 uses eight strata, seeds 17, 29, 43, sizes 2, 3, 4, and canonical instance/topology SHA-256 digests. Nine fresh-symmetry cells permit plain versus quotient UCS; 27 independent/local-history/local-negative cells permit full versus decomposed UCS; 36 other cells test conservative refusal. Each supported cost is checked against an independent exhaustive oracle and each plan replayed. The isolated rerun uses three warmups, 20 paired repetitions per algorithm/instance, a 60-second subprocess timeout, and a Linux 2 GiB virtual-address-space cap. All 1,440 trials succeeded and none were censored.
+\begin{table}[ht]\centering\caption{Median of nine instance-level paired wall-time differences per stratum, milliseconds; first algorithm minus second.}\begin{tabular}{lrr}\toprule Comparison & Initial & Isolated rerun\\\midrule Plain minus quotient & -3.442 & -3.851\\ Full minus decomposition: independent & +0.344 & +0.743\\ Full minus decomposition: local history & +0.359 & +0.740\\ Full minus decomposition: local negative & +0.193 & +0.427\\\bottomrule\end{tabular}\end{table}
+The negative quotient difference means the quotient was slower on these small synthetic cases. These are descriptive CI-host measurements, not general speedup estimates. Repeated timing bootstrap intervals do not quantify generalization to new graph topologies.
+\section{Limitations and availability}
+The models are closed and small. No matched GROOVE baseline, operational network traces, general coupled graph-repair semantics or original structural theorem has been established. Virtual-address-space limits are not RSS measurements. Code and raw artifacts are available from \url{https://github.com/Arithmetic-Power-Geometry/The-Geometry-of-Natality}, branch research/gon-stage1-20261019. Verified run: \url{https://github.com/Arithmetic-Power-Geometry/The-Geometry-of-Natality/actions/runs/39208415337}. Artifact ID 12166458810.
+\section*{Prior-art leads (bibliographic audit incomplete)}
+Hoffmann, Lomonosov and Sitharam, Planning Geometric Constraint Decomposition via Optimal Graph Transformations, DOI 10.1007/3-540-45104-8\_25. Varro-Gyapay and Varro, Optimization in Graph Transformation Systems Using Petri Net Based Techniques, DOI 10.14279/tuj.eceasst.2.61. Crespelle, Drange, Fomin and Golovach, A survey of parameterized algorithms and the complexity of edge modification, DOI 10.1016/j.cosrev.2023.100556. These entries remain verification targets.
+\end{document}
