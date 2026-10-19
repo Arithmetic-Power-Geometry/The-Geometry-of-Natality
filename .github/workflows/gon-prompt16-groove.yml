@@ -53,6 +53,15 @@ jobs:
           test -s groove-gon-run.log
           grep -Eq 'States:[[:space:]]+4' groove-gon-run.log
           grep -Eq 'Transitions:[[:space:]]+4' groove-gon-run.log
+          set +e
+          timeout 45 java -Xmx1024m -jar "${jars[0]}" experiments/research_gate/gon_capacity_counterexample.gps > groove-capacity-run.log 2>&1
+          rc2=$?
+          set -e
+          cat groove-capacity-run.log
+          echo "exit_code=$rc2" | tee groove-capacity-status.txt
+          test "$rc2" -eq 0
+          grep -Eq 'States:[[:space:]]+4' groove-capacity-run.log
+          grep -Eq 'Transitions:[[:space:]]+4' groove-capacity-run.log
       - name: Upload evidence even if parsing fails
         if: always()
         uses: actions/upload-artifact@v4
@@ -64,5 +73,8 @@ jobs:
             groove-sha256.txt
             groove-gon-run.log
             groove-gon-status.txt
+            groove-capacity-run.log
+            groove-capacity-status.txt
+            experiments/research_gate/gon_capacity_counterexample.gps/
             experiments/research_gate/gon_minimal.gps/
           if-no-files-found: warn
