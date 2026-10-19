@@ -38,7 +38,16 @@ Prompt 16 audited all 23 records: 16 automated Crossref matches, six metadata ex
 **No independent real operational network repair trace was obtained, frozen or benchmarked in Prompt 17.** Experiments are explicitly synthetic and bounded. No fabricated provenance, live-network failure trace or claimed real-world performance improvement.
 
 ## 6. Editorial readiness
-**74/100 — major revision; not Q1 submission-ready.** Improved external grammar scale, canonical semantic comparison and falsification. Still missing: GROOVE-exported transition graph and cost-matched solver; real trace; distinctive theorem; publisher-level flagged citation checks. Production gate must be independently rechecked on the newly integrated manuscript source before freezing.
+**74/100 — major revision; not Q1 submission-ready.** Improved external grammar scale, canonical semantic comparison and falsification. Still missing: GROOVE-exported transition graph and cost-matched solver; real trace; distinctive theorem; publisher-level flagged citation checks. The final integrated manuscript production gate passed; scientific novelty and external-validity gates remain open.
 
 ## 7. Prompt 18 if requested
 Only pursue a direct export and comparison of the official GROOVE transition graph, independent cost-preserving simulation or GROOVE-based cost solver, and one genuinely testable structural claim; acquire real traces only if provenance is established. Rebuild and inspect the exact committed integrated PDF; do not invent new results or repeat the original 14-page reconstruction.
+
+## 8. Final integrated authoritative PDF (completed)
+- Source: `paper/gon_prompt15_authoritative.tex`, including the verified Prompt 17 three-relay section.
+- Exact GitHub Actions CI run **39218082030 SUCCESS**: https://github.com/Arithmetic-Power-Geometry/The-Geometry-of-Natality/actions/runs/39218082030 . Source-integrity CI run **39218082026 SUCCESS**.
+- Artifact **12170886171** includes PDF, Biber/build logs, all **16** page PNG renders and SHA256 manifest.
+- Committed authoritative PDF: `paper/gon_prompt16_authoritative.pdf` (legacy filename retained to preserve workflow compatibility); **16 A4 pages**, **431,670 bytes**.
+- Exact PDF SHA256: **`2af53242fb4af9dc29274dcfb7ca2318fc37f95f47405b4c1e7bd031434f582d`**.
+- Git blob hash computed from downloaded PDF: **`f9047a44d61c08eca3497d0134d42df85fc0c33f`**, equal to GitHub branch tree entry for the committed PDF.
+- All 16 rendered pages inspected as a contact sheet. No obvious clipping or missing bibliography/figure. This confirms PDF production, not scientific originality.
