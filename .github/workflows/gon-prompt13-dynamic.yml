@@ -1,0 +1,41 @@
+name: GoN Prompt 13 dynamic repair and manuscript
+on:
+  push:
+    branches: [research/gon-stage1-20261019]
+    paths:
+      - 'experiments/research_gate/dynamic_repair_p13.py'
+      - 'tests/test_dynamic_repair_p13.py'
+      - 'paper/gon_prompt13_manuscript.tex'
+      - '.github/workflows/gon-prompt13-dynamic.yml'
+  workflow_dispatch:
+jobs:
+  dynamic-and-pdf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install independent external graph library
+        run: python -m pip install 'networkx==3.4.2'
+      - name: Run independent state graph oracle
+        run: python -m unittest discover -s tests -p test_dynamic_repair_p13.py -v
+      - name: Export complete deterministic evidence
+        run: python -m experiments.research_gate.dynamic_repair_p13 > prompt13_results.json
+      - name: Install TeX and PDF tools
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq texlive-latex-base texlive-latex-recommended texlive-fonts-recommended poppler-utils
+      - name: Compile manuscript twice
+        run: |
+          mkdir -p build
+          pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt13_manuscript.tex
+          pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt13_manuscript.tex
+          pdfinfo build/gon_prompt13_manuscript.pdf | grep 'Pages:'
+          pdftotext build/gon_prompt13_manuscript.pdf - | grep -F 'Limitations'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt13-dynamic-and-manuscript
+          path: |
+            prompt13_results.json
+            build/gon_prompt13_manuscript.pdf
+            build/gon_prompt13_manuscript.log
