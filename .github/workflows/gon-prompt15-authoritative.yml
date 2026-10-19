@@ -61,7 +61,19 @@ jobs:
           git add paper/gon_prompt16_authoritative.pdf
           if ! git diff --cached --quiet; then
             git commit -m "Prompt 16: commit CI-compiled 14-page authoritative manuscript PDF"
-            git push origin HEAD:research/gon-stage1-20261019
+            for attempt in 1 2 3 4; do
+              git fetch origin research/gon-stage1-20261019
+              git rebase origin/research/gon-stage1-20261019
+              if git push origin HEAD:research/gon-stage1-20261019; then
+                echo "Authoritative PDF committed successfully"
+                break
+              fi
+              if [ "$attempt" -eq 4 ]; then
+                echo "Cannot commit PDF after four fast-forward retries" >&2
+                exit 1
+              fi
+              sleep 2
+            done
           fi
       - uses: actions/upload-artifact@v4
         with:
