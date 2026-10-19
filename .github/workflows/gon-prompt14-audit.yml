@@ -1,0 +1,48 @@
+name: GoN Prompt 14 dynamic rewrite and manuscript audit
+on:
+  push:
+    branches: [research/gon-stage1-20261019]
+    paths:
+      - 'experiments/research_gate/dynamic_rewire_p14.py'
+      - 'paper/gon_prompt14_manuscript.tex'
+      - '.github/workflows/gon-prompt14-audit.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install external NetworkX
+        run: python -m pip install networkx==3.4.2
+      - name: Compile Python
+        run: python -m py_compile experiments/research_gate/dynamic_rewire_p14.py
+      - name: Verify independent dynamic state graphs
+        run: python -m experiments.research_gate.dynamic_rewire_p14 > prompt14_results.json
+      - name: Assert 320 matched cases
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('prompt14_results.json'))
+          assert r['checked']==320 and r['matched'] and not r['groove']
+          print(r)
+          PY
+      - name: Install PDF toolchain
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq texlive-latex-base texlive-latex-recommended texlive-fonts-recommended poppler-utils
+      - name: Compile PDF and check extractable text
+        run: |
+          mkdir -p build
+          pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt14_manuscript.tex
+          pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt14_manuscript.tex
+          pdfinfo build/gon_prompt14_manuscript.pdf | grep Pages
+          pdftotext build/gon_prompt14_manuscript.pdf - | grep -F 'Limitations'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt14-rewrite-and-pdf
+          path: |
+            prompt14_results.json
+            build/gon_prompt14_manuscript.pdf
+            build/gon_prompt14_manuscript.log
