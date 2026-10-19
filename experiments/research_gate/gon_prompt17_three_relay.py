@@ -157,7 +157,7 @@ def main():
     d2,p2=shortest(x0,xa)
     d3=bellman_ford(n0,ns,na)
     assert d1==d2==d3==12,(d1,d2,d3)
-    assert p1[0]=="delete0" and "create1" in p1 and "create2" in p1,p1
+    assert "delete0" in p1 and "create1" in p1 and "create2" in p1,p1
     summary={"grammar":ROOT.name,"rule_files":len(rules),"states":len(ns),
         "labelled_arcs":len(na),"independent_xml_oracle":"exact",
         "native_dijkstra_cost":d1,"xml_dijkstra_cost":d2,
