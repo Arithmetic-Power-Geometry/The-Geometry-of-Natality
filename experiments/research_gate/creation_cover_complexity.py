@@ -99,7 +99,7 @@ def ledger():
     a=Instance(2,(Template(frozenset({0}),1),Template(frozenset({1}),1),
                   Template(frozenset({0,1}),1)))
     # H2 false: a zero-cost creation always improves the optimal objective.
-    b=Instance(1,(Template(frozenset({0}),1),Template(frozenset({0}),0)))
+    b=Instance(1,(Template(frozenset({0}),0),Template(frozenset({0}),0)))
     # H3: cover reachability equals union cover and optimum equals weighted set cover.
     assert greedy_newly_covered(a)["cost"]==2
     assert subset_dp(a)["cost"]==exhaustive_graph(a)["cost"]==1
