@@ -7,6 +7,9 @@ User Library yielded the complete source `main(20261019-051759).tex` (42,558 byt
 ## Critical bibliography reconciliation correction
 The **root repository** `references.bib` contains 27 differently named citation keys, whereas the recovered original source cites 23 short keys. An initial CI integrity check **failed** because the keys did not match. This is a real reproducibility defect and is not concealed. We created `paper/gon_prompt15_references.bib` with 23 records mapped from the root bibliography to the original manuscript keys, and changed the authoritative TeX to use that file. The source-preservation copy remains unchanged. This key reconciliation is not a publisher-metadata audit; original local bibliography may differ in metadata from the mapped root records. CI was rerun after the correction.
 
+## LaTeX compile correction
+The first authoritative LaTeX build after bibliography reconciliation failed on an unescaped underscore in the branch name inside a texttt macro. Corrected with detokenize in commit `f40c8960215da85fe09868b067436d1c5faed296` and reran CI. The failure is preserved in Actions history.
+
 ## Authoritative source
 `paper/gon_prompt15_authoritative.tex` is derived from recovered original and adds a post-freeze evidence section, a history-sensitive deletion counterexample proposition, and a reproducibility and limits section. It preserves original propositions/algorithms/figures/tables. Its reference file is `paper/gon_prompt15_references.bib`; compile from repository root with Biber. CI builds and renders the **committed** authoritative source.
 
