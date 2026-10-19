@@ -1,0 +1,35 @@
+name: GoN Prompt 10 manuscript build
+on:
+  push:
+    branches:
+      - research/gon-stage1-20261019
+    paths:
+      - 'paper/gon_prompt10_reconstructed.tex'
+      - '.github/workflows/gon-prompt10-manuscript.yml'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install LaTeX
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq texlive-latex-base texlive-latex-recommended texlive-fonts-recommended
+      - name: Compile PDF
+        run: |
+          mkdir -p build
+          pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt10_reconstructed.tex
+          pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt10_reconstructed.tex
+          test -s build/gon_prompt10_reconstructed.pdf
+      - name: Inspect PDF structure
+        run: |
+          pdfinfo build/gon_prompt10_reconstructed.pdf | grep -E 'Pages:|Page size:|File size:'
+          pdftotext build/gon_prompt10_reconstructed.pdf - | grep -F 'Falsified conjectures'
+          pdftotext build/gon_prompt10_reconstructed.pdf - | grep -F 'Limitations'
+      - name: Upload compiled manuscript
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt10-reconstructed-manuscript
+          path: |
+            build/gon_prompt10_reconstructed.pdf
+            build/gon_prompt10_reconstructed.log
