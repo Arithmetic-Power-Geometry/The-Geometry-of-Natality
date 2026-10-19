@@ -1,4 +1,4 @@
-"""Exact fresh-name orbit search for finite creation-enabled repair instances.
+"""LEGACY DEMO ONLY: not a certified quotient search for arbitrary repair instances.
 
 The initial identities and action labels are fixed. Fresh names are exchangeable
 only when all constraints, goals, costs and future transitions are equivariant.
@@ -60,7 +60,8 @@ def demo():
     goal=lambda s: len(s[0])==2
     plain=solve(initial,actions,goal,names)
     reduced=solve(initial,actions,goal,names,True)
-    assert plain["cost"]==reduced["cost"]==2\n    assert sum(next(w for name,w,_ in actions if name==a) for a in reduced["plan"])==2
+    assert plain["cost"]==reduced["cost"]==2
+    assert sum(next(w for name,w,_ in actions if name==a) for a in reduced["plan"])==2
     return {"plain":plain,"quotient":reduced,
             "warning":"action labels are fixed, so the action-history-sensitive quotient is not expected to reduce states"}
 
