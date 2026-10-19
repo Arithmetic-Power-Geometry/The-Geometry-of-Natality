@@ -10,8 +10,11 @@ The **root repository** `references.bib` contains 27 differently named citation 
 ## LaTeX compile correction
 The first authoritative LaTeX build after bibliography reconciliation failed on an unescaped underscore in the branch name inside a texttt macro. Corrected with detokenize in commit `f40c8960215da85fe09868b067436d1c5faed296` and reran CI. The failure is preserved in Actions history.
 
+## Final authoritative-source decision
+An attempt to append post-freeze results directly to the recovered LaTeX repeatedly failed with a late math-mode error at `\\end{document}`. Rather than publish an uncompiled artifact, the authoritative manuscript was restored to the complete **original 14-page source** with only the corrected bibliography path. All Prompt 1–15 negative findings, counterexamples and new experimental results remain committed as **separate, explicitly citable research audit documents**. They have **not** been integrated into the journal manuscript. This is a partial completion of the requested integrated rewrite, not a hidden success.
+
 ## Authoritative source
-`paper/gon_prompt15_authoritative.tex` is derived from recovered original and adds a post-freeze evidence section, a history-sensitive deletion counterexample proposition, and a reproducibility and limits section. It preserves original propositions/algorithms/figures/tables. Its reference file is `paper/gon_prompt15_references.bib`; compile from repository root with Biber. CI builds and renders the **committed** authoritative source.
+`paper/gon_prompt15_authoritative.tex` is the recovered full original source with a corrected bibliography path. The post-freeze evidence and history-sensitive deletion counterexample remain in the separate research reports and are **not** included in the final authoritative TeX. Its reference file is `paper/gon_prompt15_references.bib`; compile from repository root with Biber. CI builds and renders the **committed** authoritative source.
 
 ## Claim-to-evidence audit
 | Original item | Status |
