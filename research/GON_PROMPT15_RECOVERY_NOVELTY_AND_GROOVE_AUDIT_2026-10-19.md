@@ -4,8 +4,11 @@ Date: 2026-10-19
 ## Major recovery
 User Library yielded the complete source `main(20261019-051759).tex` (42,558 bytes), alongside the original 14-page PDF `main(20261019-051755).pdf` (487,802 bytes). Preserved **unchanged** at `paper/original_20261019_recovered.tex`. The original source contains **six propositions, four algorithms, four figures, eight tables**, and cites all **23** entries in repository `references.bib`. No missing citation keys, no uncited bibliography entries, and no duplicate bibliography keys/DOIs were found by local structural checks. Every BibTeX entry includes author, title, year, DOI. **These are structural checks, not publisher verification of each DOI or metadata**.
 
+## Critical bibliography reconciliation correction
+The **root repository** `references.bib` contains 27 differently named citation keys, whereas the recovered original source cites 23 short keys. An initial CI integrity check **failed** because the keys did not match. This is a real reproducibility defect and is not concealed. We created `paper/gon_prompt15_references.bib` with 23 records mapped from the root bibliography to the original manuscript keys, and changed the authoritative TeX to use that file. The source-preservation copy remains unchanged. This key reconciliation is not a publisher-metadata audit; original local bibliography may differ in metadata from the mapped root records. CI was rerun after the correction.
+
 ## Authoritative source
-`paper/gon_prompt15_authoritative.tex` is derived from recovered original and adds a post-freeze evidence section, a history-sensitive deletion counterexample proposition, and a reproducibility and limits section. It preserves original propositions/algorithms/figures/tables. Its reference file is root `references.bib`; compile from repository root with Biber. CI builds and renders the **committed** authoritative source.
+`paper/gon_prompt15_authoritative.tex` is derived from recovered original and adds a post-freeze evidence section, a history-sensitive deletion counterexample proposition, and a reproducibility and limits section. It preserves original propositions/algorithms/figures/tables. Its reference file is `paper/gon_prompt15_references.bib`; compile from repository root with Biber. CI builds and renders the **committed** authoritative source.
 
 ## Claim-to-evidence audit
 | Original item | Status |
