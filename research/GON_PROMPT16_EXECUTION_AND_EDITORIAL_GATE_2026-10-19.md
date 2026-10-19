@@ -30,6 +30,16 @@ Original propositions: (1) action-set monotonicity; (2) definition-level creatio
 ## 6. External validity and verdict
 Static HiGHS 4,096 bounded cells; dynamic NetworkX 320 bounded cells; resource-limited synthetic benchmark 1,440 trials; GROOVE minimal four-state grammar. None are real operational repair traces or a semantically matched GROOVE cost-optimal comparison for full multi-relay model. Distinguish evidence by scope. Editorial rating **72/100 — major revision**. Improvement over Prompt 15 is due to successful full PDF CI, a real albeit tiny GROOVE executable grammar, explicit falsification, and bibliographic correction. Not Q1 submission-ready.
 
+## 7. FINAL integrated PDF — exact committed bytes verified
+- Final authoritative source: `paper/gon_prompt15_authoritative.tex` (post-freeze section integrated, including **two** GROOVE grammars and independent labelled-transition checks).
+- Final successful GitHub Actions run **39216888262**, URL https://github.com/Arithmetic-Power-Geometry/The-Geometry-of-Natality/actions/runs/39216888262 .
+- CI artifact **12169443540**: PDF, log, Biber log, all 15 page renders and PDF SHA256 manifest.
+- Final PDF committed to **`paper/gon_prompt16_authoritative.pdf`** on branch `research/gon-stage1-20261019`.
+- **15 A4 pages**, 427,793 bytes, SHA256 **`aedce6b6011cc9d05e2bf0d27df5bfec615bcde53e2c84d9cf18bd8de42138da`**.
+- Git blob SHA1 computed from the exact downloaded artifact: **`4f815b1f2196f51b91d197d180dae170c7da3706`**, matching the committed PDF blob in the repository tree. This is byte-for-byte verification, not merely a filename match.
+- All 15 CI-rendered PNG pages downloaded and visually inspected; no obvious clipping, missing figures or bibliography failures. Source integrity workflow also passed.
+- Earlier PDF build failures and push races remain in GitHub Actions history. The final successful run resolves the exact PDF artifact and commit gates.
+
 ## Remaining gates for Prompt 17, if needed
 1. Establish labelled transition and weighted goal-cost equivalence with a nontrivial multi-name GROOVE grammar, not merely equal state counts.
 2. Independently source real failure/repair traces with provenance and preregister matched external baseline comparisons.
