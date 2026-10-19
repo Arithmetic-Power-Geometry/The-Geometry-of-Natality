@@ -1,0 +1,41 @@
+name: GoN Prompt 11 creation-cover structural falsification
+on:
+  push:
+    branches:
+      - research/gon-stage1-20261019
+    paths:
+      - 'experiments/research_gate/creation_cover_complexity.py'
+      - 'tests/test_creation_cover_complexity.py'
+      - '.github/workflows/gon-prompt11-creation-cover.yml'
+  workflow_dispatch:
+jobs:
+  structural-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile
+        run: python -m py_compile experiments/research_gate/creation_cover_complexity.py tests/test_creation_cover_complexity.py
+      - name: Independent exact graph-vs-DP test
+        run: python -m unittest discover -s tests -p test_creation_cover_complexity.py -v
+      - name: Export falsification and exhaustive comparison
+        run: python -m experiments.research_gate.creation_cover_complexity > prompt11_creation_cover_results.json
+      - name: Validate machine-readable output
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('prompt11_creation_cover_results.json'))
+          assert d['exhaustive']['checked']==9261
+          assert d['exhaustive']['status']=='exact_match'
+          assert d['counterexamples']['H1']['optimal_cost']==1
+          assert d['counterexamples']['H3']['status']=='true_conditional_standard'
+          print(d['exhaustive'])
+          PY
+      - name: Upload counterexamples and matched exact baselines
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt11-creation-cover-evidence
+          path: prompt11_creation_cover_results.json
