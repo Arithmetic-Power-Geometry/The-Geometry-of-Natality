@@ -5,6 +5,7 @@ on:
     paths:
       - 'experiments/research_gate/groove_minimal_fixture.py'
       - 'experiments/research_gate/prompt16_delete_essential_counterexample.py'
+      - 'experiments/research_gate/groove_rule_equivalence_oracle.py'
       - '.github/workflows/gon-prompt16-groove.yml'
   workflow_dispatch:
 jobs:
@@ -21,6 +22,8 @@ jobs:
         run: |
           python3 experiments/research_gate/groove_minimal_fixture.py | tee gon-minimal-oracle.json
           find experiments/research_gate/gon_minimal.gps -type f -maxdepth 1 | sort
+      - name: Verify exact labelled transitions against independent graph-rule interpreter
+        run: python3 experiments/research_gate/groove_rule_equivalence_oracle.py | tee gon-labelled-equivalence.json
       - name: Independently falsify delete-free reachability
         run: python3 experiments/research_gate/prompt16_delete_essential_counterexample.py | tee gon-delete-essential.json
       - name: Download official GROOVE generator
@@ -70,6 +73,7 @@ jobs:
           path: |
             gon-minimal-oracle.json
             gon-delete-essential.json
+            gon-labelled-equivalence.json
             groove-sha256.txt
             groove-gon-run.log
             groove-gon-status.txt
