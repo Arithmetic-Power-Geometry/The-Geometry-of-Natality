@@ -1,0 +1,51 @@
+name: GoN Prompt 17 external grammar
+on:
+  push:
+    branches: [research/gon-stage1-20261019]
+    paths:
+      - 'experiments/research_gate/gon_prompt17_three_relay.py'
+      - '.github/workflows/gon-prompt17-three-relay.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Check weighted model and create grammar
+        run: python3 experiments/research_gate/gon_prompt17_three_relay.py | tee gon-prompt17-three-relay.json
+      - name: Download GROOVE release
+        run: |
+          python3 - <<'PY'
+          import json,urllib.request
+          url='https://api.github.com/repos/nl-utwente-groove/code/releases/latest'
+          req=urllib.request.Request(url,headers={'User-Agent':'GoN-Prompt17'})
+          with urllib.request.urlopen(req,timeout=30) as f: data=json.load(f)
+          assets=[a for a in data['assets'] if a['name'].endswith('-bin.zip') and 'doc' not in a['name']]
+          assert len(assets)==1
+          urllib.request.urlretrieve(assets[0]['browser_download_url'],'groove-bin.zip')
+          PY
+          sha256sum groove-bin.zip > groove-download-sha256.txt
+          unzip -q groove-bin.zip -d groove-unpacked
+      - name: Run GROOVE Generator on three-relay grammar
+        shell: bash
+        run: |
+          set -euo pipefail
+          jar=$(find groove-unpacked -type f -name Generator.jar | head -1)
+          test -n "$jar"
+          timeout 75 java -Xmx1024m -jar "$jar" experiments/research_gate/gon_three_relay_capacity.gps | tee gon-prompt17-groove.log
+          grep 'States:' gon-prompt17-groove.log
+          grep 'Transitions:' gon-prompt17-groove.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gon-prompt17-three-relay-evidence
+          path: |
+            gon-prompt17-three-relay.json
+            gon-prompt17-groove.log
+            groove-download-sha256.txt
+            experiments/research_gate/gon_three_relay_capacity.gps/
