@@ -79,8 +79,35 @@ def oracle():
                 seen.add(t);q.append(t)
     return sorted(seen), sorted(arcs)
 
+
+def capacity_counterexample_grammar():
+    """Two names; initially live name0; capacity one; only name1 can link."""
+    dest=pathlib.Path("experiments/research_gate/gon_capacity_counterexample.gps")
+    dest.mkdir(parents=True,exist_ok=True)
+    write_graph(dest/"start.gst","start","graph",("n0","n1","n2"),[
+        ("n0","n0","Name0"),("n0","n0","used"),("n0","n0","live"),
+        ("n1","n1","Name1"),("n2","n2","Terminal")])
+    rules={
+        "delete0":(("n0",),[("n0","n0","Name0"),("n0","n0","del:live")]),
+        "create1":(("n0","n1"),[("n0","n0","Name0"),("n0","n0","not:live"),
+            ("n1","n1","Name1"),("n1","n1","not:used"),
+            ("n1","n1","new:used"),("n1","n1","new:live")]),
+        "link1":(("n1","n2"),[("n1","n1","Name1"),("n1","n1","live"),
+            ("n2","n2","Terminal"),("n1","n2","not:linked"),("n1","n2","new:linked")]),
+        "unlink1":(("n1","n2"),[("n1","n1","Name1"),("n1","n1","live"),
+            ("n2","n2","Terminal"),("n1","n2","del:linked")])
+    }
+    for name,(nodes,edges) in rules.items():
+        write_graph(dest/(name+".gpr"),name,"rule",nodes,edges)
+    (dest/"system.properties").write_text(
+        "startGraph=start\nenableControl=false\nuseStoredNodeIDs=true\n"
+        "grammarVersion=3.10\ngrooveVersion=6.8.0\n"
+        "remark=Capacity-one terminal-reachability deletion counterexample\n")
+    return rules
+
 if __name__=="__main__":
     rules=fixture()
+    capacity_rules=capacity_counterexample_grammar()
     states,arcs=oracle()
     assert len(states)==4 and len(arcs)==4, (states,arcs)
-    print(json.dumps({"states":states,"arcs":arcs,"rules":list(rules)},indent=2))
+    print(json.dumps({"states":states,"arcs":arcs,"rules":list(rules),"capacity_counterexample_rules":list(capacity_rules)},indent=2))
