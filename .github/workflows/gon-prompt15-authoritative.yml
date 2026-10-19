@@ -50,31 +50,38 @@ jobs:
           mkdir -p build/pages
           pdftoppm -f 1 -l 30 -r 90 -png build/gon_prompt15_authoritative.pdf build/pages/page >/dev/null 2>&1
           test "$(find build/pages -name '*.png' | wc -l)" -ge 14
-      - name: Commit exact compiled authoritative PDF to research branch
+      - name: Commit exact compiled PDF only for current authoritative source
         shell: bash
         run: |
           set -euo pipefail
-          cp build/gon_prompt15_authoritative.pdf paper/gon_prompt16_authoritative.pdf
-          sha256sum paper/gon_prompt16_authoritative.pdf | tee build/committed-pdf-sha256.txt
+          sha256sum build/gon_prompt15_authoritative.pdf | tee build/committed-pdf-sha256.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add paper/gon_prompt16_authoritative.pdf
-          if ! git diff --cached --quiet; then
-            git commit -m "Prompt 16: commit CI-compiled 14-page authoritative manuscript PDF"
-            for attempt in 1 2 3 4; do
-              git fetch origin research/gon-stage1-20261019
-              git rebase origin/research/gon-stage1-20261019
-              if git push origin HEAD:research/gon-stage1-20261019; then
-                echo "Authoritative PDF committed successfully"
-                break
-              fi
-              if [ "$attempt" -eq 4 ]; then
-                echo "Cannot commit PDF after four fast-forward retries" >&2
-                exit 1
-              fi
-              sleep 2
-            done
-          fi
+          for attempt in 1 2 3 4; do
+            git fetch origin research/gon-stage1-20261019
+            local_tex=$(git rev-parse HEAD:paper/gon_prompt15_authoritative.tex)
+            remote_tex=$(git rev-parse origin/research/gon-stage1-20261019:paper/gon_prompt15_authoritative.tex)
+            local_bib=$(git rev-parse HEAD:paper/gon_prompt15_references.bib)
+            remote_bib=$(git rev-parse origin/research/gon-stage1-20261019:paper/gon_prompt15_references.bib)
+            if [ "$local_tex" != "$remote_tex" ] || [ "$local_bib" != "$remote_bib" ]; then
+              echo "Source or bibliography changed after this build; skipping stale PDF commit."
+              exit 0
+            fi
+            git reset --hard origin/research/gon-stage1-20261019
+            cp build/gon_prompt15_authoritative.pdf paper/gon_prompt16_authoritative.pdf
+            git add paper/gon_prompt16_authoritative.pdf
+            if git diff --cached --quiet; then
+              echo "Exact PDF already committed."
+              exit 0
+            fi
+            git commit -m "Prompt 16: commit exact CI-compiled authoritative manuscript PDF"
+            if git push origin HEAD:research/gon-stage1-20261019; then
+              echo "Authoritative PDF committed successfully"
+              exit 0
+            fi
+            if [ "$attempt" -eq 4 ]; then exit 1; fi
+            sleep 2
+          done
       - uses: actions/upload-artifact@v4
         with:
           name: gon-prompt15-authoritative-pdf-and-renders
