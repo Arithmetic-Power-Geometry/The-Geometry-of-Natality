@@ -1,0 +1,62 @@
+name: GoN Prompt 16 minimal GROOVE grammar execution
+on:
+  push:
+    branches: [research/gon-stage1-20261019]
+    paths:
+      - 'experiments/research_gate/groove_minimal_fixture.py'
+      - '.github/workflows/gon-prompt16-groove.yml'
+  workflow_dispatch:
+jobs:
+  groove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Build actual GROOVE rule files and independent oracle
+        run: |
+          python3 experiments/research_gate/groove_minimal_fixture.py | tee gon-minimal-oracle.json
+          find experiments/research_gate/gon_minimal.gps -type f -maxdepth 1 | sort
+      - name: Download official GROOVE generator
+        run: |
+          python3 - <<'PY'
+          import json,urllib.request
+          u='https://api.github.com/repos/nl-utwente-groove/code/releases/latest'
+          req=urllib.request.Request(u,headers={'Accept':'application/vnd.github+json','User-Agent':'GoN-Prompt16'})
+          with urllib.request.urlopen(req,timeout=30) as resp: data=json.load(resp)
+          assets=[x for x in data['assets'] if x['name'].endswith('-bin.zip') and 'doc' not in x['name']]
+          assert len(assets)==1,assets
+          print(data['tag_name'],assets[0]['name'])
+          urllib.request.urlretrieve(assets[0]['browser_download_url'],'groove-bin.zip')
+          PY
+          sha256sum groove-bin.zip | tee groove-sha256.txt
+          unzip -q groove-bin.zip -d groove-unpacked
+      - name: Execute GoN-specific GROOVE grammar
+        shell: bash
+        run: |
+          set -o pipefail
+          mapfile -t jars < <(find groove-unpacked -type f -name Generator.jar)
+          test "${#jars[@]}" -eq 1
+          set +e
+          timeout 45 java -Xmx1024m -jar "${jars[0]}" experiments/research_gate/gon_minimal.gps > groove-gon-run.log 2>&1
+          rc=$?
+          set -e
+          cat groove-gon-run.log
+          echo "exit_code=$rc" | tee groove-gon-status.txt
+          test "$rc" -eq 0
+          test -s groove-gon-run.log
+      - name: Upload evidence even if parsing fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt16-groove-minimal-evidence
+          path: |
+            gon-minimal-oracle.json
+            groove-sha256.txt
+            groove-gon-run.log
+            groove-gon-status.txt
+            experiments/research_gate/gon_minimal.gps/
+          if-no-files-found: warn
