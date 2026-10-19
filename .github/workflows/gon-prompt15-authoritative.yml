@@ -5,7 +5,7 @@ on:
     paths:
       - 'paper/gon_prompt15_authoritative.tex'
       - 'paper/original_20261019_recovered.tex'
-      - 'references.bib'
+      - 'paper/gon_prompt15_references.bib'
       - '.github/workflows/gon-prompt15-authoritative.yml'
   workflow_dispatch:
 jobs:
@@ -22,7 +22,7 @@ jobs:
           import re,pathlib
           s=pathlib.Path('paper/original_20261019_recovered.tex').read_text()
           m=pathlib.Path('paper/gon_prompt15_authoritative.tex').read_text()
-          b=pathlib.Path('references.bib').read_text()
+          b=pathlib.Path('paper/gon_prompt15_references.bib').read_text()
           assert [s.count('\\begin{'+x+'}') for x in ('proposition','algorithm','figure','table')]==[6,4,4,8]
           keys=set(re.findall(r'@\w+\s*\{\s*([^,]+)',b))
           used=set(k.strip() for group in re.findall(r'\\(?:cite|parencite|textcite|autocite)\{([^}]*)\}',m) for k in group.split(','))
