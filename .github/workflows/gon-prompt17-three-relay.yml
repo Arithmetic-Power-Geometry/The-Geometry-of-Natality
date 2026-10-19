@@ -17,7 +17,11 @@ jobs:
           distribution: temurin
           java-version: '21'
       - name: Check weighted model and create grammar
-        run: python3 experiments/research_gate/gon_prompt17_three_relay.py | tee gon-prompt17-three-relay.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 experiments/research_gate/gon_prompt17_three_relay.py | tee gon-prompt17-three-relay.json
+          test -s gon-prompt17-three-relay.json
       - name: Download GROOVE release
         run: |
           python3 - <<'PY'
@@ -38,6 +42,15 @@ jobs:
           jar=$(find groove-unpacked -type f -name Generator.jar | head -1)
           test -n "$jar"
           timeout 75 java -Xmx1024m -jar "$jar" experiments/research_gate/gon_three_relay_capacity.gps | tee gon-prompt17-groove.log
+          python3 - <<'PY'
+          import json,re
+          result=json.load(open('gon-prompt17-three-relay.json'))
+          log=open('gon-prompt17-groove.log').read()
+          state=re.search(r'(?m)^States:\\s*(\\d+)',log)
+          assert state and int(state.group(1))==result['states'],(state,result)
+          print('Matched state count:',result['states'])
+          print('Canonical labelled arcs:',result['labelled_arcs'])
+          PY
           grep 'States:' gon-prompt17-groove.log
           grep 'Transitions:' gon-prompt17-groove.log
       - uses: actions/upload-artifact@v4
