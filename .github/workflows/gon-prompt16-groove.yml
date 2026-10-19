@@ -4,6 +4,7 @@ on:
     branches: [research/gon-stage1-20261019]
     paths:
       - 'experiments/research_gate/groove_minimal_fixture.py'
+      - 'experiments/research_gate/prompt16_delete_essential_counterexample.py'
       - '.github/workflows/gon-prompt16-groove.yml'
   workflow_dispatch:
 jobs:
@@ -20,6 +21,8 @@ jobs:
         run: |
           python3 experiments/research_gate/groove_minimal_fixture.py | tee gon-minimal-oracle.json
           find experiments/research_gate/gon_minimal.gps -type f -maxdepth 1 | sort
+      - name: Independently falsify delete-free reachability
+        run: python3 experiments/research_gate/prompt16_delete_essential_counterexample.py | tee gon-delete-essential.json
       - name: Download official GROOVE generator
         run: |
           python3 - <<'PY'
@@ -48,6 +51,8 @@ jobs:
           echo "exit_code=$rc" | tee groove-gon-status.txt
           test "$rc" -eq 0
           test -s groove-gon-run.log
+          grep -Eq 'States:[[:space:]]+4' groove-gon-run.log
+          grep -Eq 'Transitions:[[:space:]]+4' groove-gon-run.log
       - name: Upload evidence even if parsing fails
         if: always()
         uses: actions/upload-artifact@v4
@@ -55,6 +60,7 @@ jobs:
           name: gon-prompt16-groove-minimal-evidence
           path: |
             gon-minimal-oracle.json
+            gon-delete-essential.json
             groove-sha256.txt
             groove-gon-run.log
             groove-gon-status.txt
