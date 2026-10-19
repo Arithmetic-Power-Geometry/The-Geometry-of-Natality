@@ -3,7 +3,7 @@ Date: 2026-10-19
 
 ## Successful recovery and local proof
 - Original source: Library `main(20261019-051759).tex`, preserved in GitHub `paper/original_20261019_recovered.tex`.
-- Original supplied PDF: Library `main(20261019-051755).pdf`, **14 pages**. All 14 pages rendered as PNG and visually inspected using a contact sheet. No obvious clipped content.
+- Original supplied PDF: Library `main(20261019-051755).pdf`, **14 pages**. All 14 pages rendered as PNG and visually inspected using a contact sheet. No obvious clipped content. The locally rebuilt 14-page PDF was also rendered on all 14 pages and inspected; its build uses the original 23-entry local bibliography, not the mapped GitHub bibliography.
 - Original source locally compiled with `pdflatex`, `biber`, `pdflatex`, `pdflatex` and the earlier 23-entry local bibliography: **14 pages**, exit code 0. This local PDF is not byte-identical to the GitHub CI attempt, which uses a mapped bibliography.
 - Six original propositions, four algorithms, four figures, eight tables, 23 cited keys recovered. Key compatibility and BibTeX structure audited; not all 23 publisher metadata independently verified.
 
@@ -21,3 +21,5 @@ Date: 2026-10-19
 
 ## Editorial verdict
 **64/100, major revision** (editorial judgment only). Strongest improvement: original complete source recovered. Do not submit to selective Q1. Prompt 16 should prioritize CI build reproducibility, real GROOVE semantics and reference verification before further prose drafting.
+
+- Separate source-integrity workflow run **39214652974**: SUCCESS, all 23 manuscript keys matched source-specific bibliography; this does not imply PDF compilation passed. https://github.com/Arithmetic-Power-Geometry/The-Geometry-of-Natality/actions/runs/39214652974
