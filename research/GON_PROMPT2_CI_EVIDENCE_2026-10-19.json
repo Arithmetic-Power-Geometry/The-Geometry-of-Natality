@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-19",
+  "branch": "research/gon-stage1-20261019",
+  "verified_workflow_run": "https://github.com/Arithmetic-Power-Geometry/The-Geometry-of-Natality/actions/runs/39205650411",
+  "tested_commit": "e6c7f02d92304786623020fd16ce8d5a4521016c",
+  "conclusion": "success",
+  "tests_source": "tests/test_exact_orbit_key.py",
+  "unittest_methods": 11,
+  "exhaustive_states": 64,
+  "ordered_pairs": 4096,
+  "checks": [
+    "typed state orbit iff oracle",
+    "group equivalence relation",
+    "role partitions",
+    "fixed identities",
+    "history rename",
+    "identity-specific costs",
+    "negative guards",
+    "shared resources",
+    "fail-closed flags",
+    "legacy prototype syntax and demo"
+  ],
+  "claims_excluded": [
+    "general transition-system equivariance automatically proved",
+    "quotient UCS correctness",
+    "runtime speedup",
+    "Q1 novelty"
+  ],
+  "notes": "Test counts are from source inspection; CI confirms unittest command succeeded. No machine-readable per-assertion count extracted."
+}
