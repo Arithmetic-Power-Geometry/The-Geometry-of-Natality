@@ -1,0 +1,43 @@
+name: GoN matched benchmark v1
+on:
+  push:
+    branches:
+      - research/gon-stage1-20261019
+    paths:
+      - 'experiments/research_gate/benchmark_runner_v1.py'
+      - 'tests/test_benchmark_runner_v1.py'
+      - '.github/workflows/gon-matched-benchmark.yml'
+  workflow_dispatch:
+jobs:
+  matched-benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile
+        run: python -m py_compile experiments/research_gate/benchmark_runner_v1.py tests/test_benchmark_runner_v1.py
+      - name: Verify frozen manifest and smoke matched semantics
+        run: python -m unittest discover -s tests -p test_benchmark_runner_v1.py -v
+      - name: Execute frozen matched 20-repetition benchmark
+        run: python -m experiments.research_gate.benchmark_runner_v1 --repetitions 20 --warmup 3 --output prompt8_results.json
+      - name: Verify result counts and costs
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open("prompt8_results.json"))
+          assert d["counts"]=={"matched_cells":36,"negative_control_cells":36,"measured_trials":1440}
+          assert all(x["status"]=="success" for x in d["trials"])
+          assert all(x["status"]=="correct_refusal" for x in d["negative_controls"])
+          assert all(x["comparison"]["pairs"]==20 for x in d["comparisons"])
+          print("PASS",d["counts"])
+          PY
+      - name: Upload complete raw data and statistical results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt8-matched-results
+          path: prompt8_results.json
+          if-no-files-found: warn
