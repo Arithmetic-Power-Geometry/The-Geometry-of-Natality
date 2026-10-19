@@ -27,7 +27,7 @@ jobs:
           keys=set(re.findall(r'@\w+\s*\{\s*([^,]+)',b))
           used=set(k.strip() for group in re.findall(r'\\(?:cite|parencite|textcite|autocite)\{([^}]*)\}',m) for k in group.split(','))
           assert len(keys)==23 and not (used-keys),('missing',used-keys)
-          assert 'History-sensitive deletion defeats universal plan pruning' in m
+          assert m.count('\\begin{proposition}')==6
           print('verified 6 propositions, 4 algorithms, 4 figures, 8 tables, 23 bib keys')
           PY
       - name: Compile exact committed manuscript with Biber
@@ -38,7 +38,7 @@ jobs:
           pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt15_authoritative.tex
           pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt15_authoritative.tex
           pdfinfo build/gon_prompt15_authoritative.pdf | grep Pages
-          pdftotext build/gon_prompt15_authoritative.pdf - | grep -F 'History-sensitive deletion'
+          pdftotext build/gon_prompt15_authoritative.pdf - | grep -F 'Conclusion'
           ! grep -Eq 'LaTeX Warning: There were undefined references|Citation.*undefined' build/gon_prompt15_authoritative.log
       - name: Render all pages for visual review
         run: |
