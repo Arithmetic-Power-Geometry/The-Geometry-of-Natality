@@ -46,8 +46,8 @@ jobs:
           import json,re
           result=json.load(open('gon-prompt17-three-relay.json'))
           log=open('gon-prompt17-groove.log').read()
-          state=re.search(r'(?m)^States:\\s*(\\d+)',log)
-          assert state and int(state.group(1))==result['states'],(state,result)
+          state=next((line.split(':',1)[1].strip() for line in log.splitlines() if line.startswith('States:')),None)
+          assert state and int(state)==result['states'],(state,result)
           print('Matched state count:',result['states'])
           print('Canonical labelled arcs:',result['labelled_arcs'])
           PY
