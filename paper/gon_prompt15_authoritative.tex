@@ -365,36 +365,5 @@ The original implementation, synthetic fixtures, independent verification progra
 \textbf{Competing interests:} No competing interests are declared.\\
 \textbf{Data provenance:} All evaluated instances are synthetic.
 
-
-\section{Post-freeze independent research gates: evidence and negative findings}
-\label{sec:postfreeze}
-The following results were developed after the source manuscript was frozen. They do not retroactively validate any stronger claim in the original experiments.
-
-\subsection{Conservative symmetry and decomposition gates}
-Exact orbit canonicalization was implemented for a closed finite grammar, with independent finite permutation oracles. Identity-specific costs and opaque conditions remain explicit refusal cases. The certified independent-component decomposition was tested against a coupled shared-restart-capacity counterexample, where the uncoupled optimum is two and the coupled optimum is four. The standard largest-positive-savings formula for a cardinality constraint was checked on 80,973 bounded parameter cells. None of these results is claimed as a new mathematical principle.
-
-\subsection{Frozen benchmark and performance limitations}
-The frozen synthetic benchmark has 72 instances, including 36 matched and 36 negative/refusal cells. An isolated rerun measured 1,440 paired trials, with no censored outcomes. The median of nine instance-level paired wall-time differences for plain minus quotient UCS was $-3.851$ milliseconds, indicating that quotienting was slower on the tested small symmetry instances. Decomposition comparisons produced positive but very small descriptive medians; these repeated trials do not establish performance on unobserved systems. The experimental resource limit was a 60-second subprocess timeout and a two-gibibyte virtual address-space cap, not a measured two-gibibyte peak RSS.
-
-\subsection{Creation-relay set cover and static dependency encoding}
-In a closed root-to-terminal relay-creation grammar, a selected set of created relays reaches all terminals precisely when its coverage sets form a set cover. The optimization problem is therefore weighted Set Cover; this is an established reduction, not a new complexity theorem. The restricted static dependency grammar additionally supports acyclic prerequisites, a shared relay-count capacity and forbidden pairs. An independent SciPy/HiGHS mixed-integer optimizer and graph enumeration agreed on 4,096 bounded models. This external MILP solver is not a GROOVE graph-transformation baseline.
-
-\subsection{Dynamic graph rewriting and action-time exclusions}
-The bounded dynamic grammar tracks live relay names, a permanently used-name set, and directed links. Create, add-link, remove-link and delete actions are evaluated under live capacity and action-time forbidden-edge conditions. The native uniform-cost implementation and an independently enumerated NetworkX state graph agreed on 320 parameter cells, including infeasible cases. The state graph is generated independently of the native action generator, but NetworkX itself is an external shortest-path library, not an independently authored GROOVE rule interpreter.
-
-\begin{proposition}[History-sensitive deletion defeats universal plan pruning]
-\label{prop:historycounterexample}
-There exists a finite nonnegative-cost creation/deletion repair instance whose only successful plans contain a deletion action, although the corresponding positive terminal-reachability grammar admits a delete-free optimum.
-\end{proposition}
-\begin{proof}
-Take one initially unused relay identity $0$ and the goal that identity $0$ has been allocated but is no longer live. Initially $A=H=\varnothing$. Creating $0$ gives $A=H=\{0\}$; deleting it gives $A=\varnothing$ and $H=\{0\}$, satisfying the goal. Every delete-free sequence either never allocates $0$ (so $H=\varnothing$) or leaves it live (so $A=\{0\}$). Thus no delete-free plan reaches the goal. This does not contradict the restricted monotone terminal-reachability pruning argument, which excludes historical goals.
-\end{proof}
-
-\subsection{Independent originality and external semantics gate}
-Existing graph transformation, set-cover, Steiner connectivity, symmetry reduction, and Dijkstra search literature prevents priority claims based solely on reformulation. The original root bibliography has 23 records, but publisher-by-publisher verification of all entries remains incomplete. The official GROOVE Generator smoke test executes a sample grammar only; no semantically matched GROOVE repair grammar with action costs, allocation history and action-time guards has been successfully executed. The present manuscript therefore remains a research-stage, full-length reconstruction rather than a submission-cleared original theorem paper.
-
-\section{Reproducibility and audit trail}
-All experiments are synthetic. Full code, results and CI reports are retained in the Geometry of Natality repository. Independent novelty, external graph-rewriting equivalence and bibliography metadata verification remain open.
-
 \printbibliography
 \end{document}
