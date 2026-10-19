@@ -1,0 +1,37 @@
+name: GoN Prompt 15 source integrity gate
+on:
+  push:
+    branches: [research/gon-stage1-20261019]
+    paths:
+      - 'paper/gon_prompt15_authoritative.tex'
+      - 'paper/original_20261019_recovered.tex'
+      - 'paper/gon_prompt15_references.bib'
+      - '.github/workflows/gon-prompt15-source-integrity.yml'
+  workflow_dispatch:
+jobs:
+  source-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify recovered original and citation keys
+        run: |
+          python3 - <<'PY'
+          import pathlib,re,json
+          o=pathlib.Path('paper/original_20261019_recovered.tex').read_text()
+          s=pathlib.Path('paper/gon_prompt15_authoritative.tex').read_text()
+          b=pathlib.Path('paper/gon_prompt15_references.bib').read_text()
+          counts={k:o.count('\\begin{'+k+'}') for k in ('proposition','algorithm','figure','table')}
+          assert counts=={'proposition':6,'algorithm':4,'figure':4,'table':8}
+          keys=set(re.findall(r'@\w+\s*\{([^,]+)',b))
+          used=set(k.strip() for x in re.findall(r'\\cite\{([^}]+)\}',s) for k in x.split(','))
+          assert len(keys)==len(used)==23 and used==keys
+          assert 'gon_prompt15_references.bib' in s
+          out={'status':'passed','original_components':counts,'bib_keys':len(keys),
+               'pdf_ci':'separate full PDF workflow currently failing; no false success'}
+          pathlib.Path('prompt15_integrity.json').write_text(json.dumps(out,indent=2))
+          print(out)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt15-source-integrity
+          path: prompt15_integrity.json
