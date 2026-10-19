@@ -7,6 +7,7 @@ def qtile(values,q):
     v=sorted(values)
     if not v:return None
     z=q*(len(v)-1);lo=int(z);hi=min(lo+1,len(v)-1)
+    if lo==hi:return v[lo]
     return v[lo]*(hi-z)+v[hi]*(z-lo)
 def boot_ci(values,seed,draws=1000):
     if not values:return [None,None]
