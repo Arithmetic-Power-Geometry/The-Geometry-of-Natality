@@ -1,0 +1,39 @@
+name: GoN Prompt 12 external MILP equivalence
+on:
+  push:
+    branches: [research/gon-stage1-20261019]
+    paths:
+      - 'experiments/research_gate/creation_dependency_milp.py'
+      - 'tests/test_creation_dependency_milp.py'
+      - '.github/workflows/gon-prompt12-milp.yml'
+  workflow_dispatch:
+jobs:
+  equivalence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install external optimization package
+        run: python -m pip install 'numpy==2.2.6' 'scipy==1.15.3'
+      - name: Compile
+        run: python -m py_compile experiments/research_gate/creation_dependency_milp.py tests/test_creation_dependency_milp.py
+      - name: Independent graph traversal versus HiGHS MILP
+        run: python -m unittest discover -s tests -p test_creation_dependency_milp.py -v
+      - name: Export deterministic evidence
+        run: python -m experiments.research_gate.creation_dependency_milp > prompt12_milp_evidence.json
+      - name: Assert coverage
+        run: |
+          python - <<'PY'
+          import json
+          j=json.load(open('prompt12_milp_evidence.json'))
+          assert j['sweep']['checked']==4096
+          assert j['sweep']['all_costs_match']
+          print(j['sweep'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt12-matched-external-milp
+          path: prompt12_milp_evidence.json
