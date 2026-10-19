@@ -1,31 +1,43 @@
-# GoN application candidate: identity-sensitive workflow recovery
+# Dependency-repair fixture
 
-**Status: specification and fixture only. NOT a real-world dataset, not a GROOVE comparison, not Q1 evidence.** This candidate is motivated by software workflow recovery, but the fixture is synthetic.
+This directory contains the synthetic workflow-recovery instance and exact verification scripts used in *The Geometry of Natality: Creation Obligations, Attainable Futures, and Costed Structural Transformation* (Akhtar, 2026). The deposited manuscript is available at https://doi.org/10.5281/zenodo.23456986.
 
-## Operational setting
-A workflow has named services and directed dependency edges. A service is *usable* only if it is alive and every predecessor dependency is usable. A repair step may create a new service identity and install edges, or may rewire an existing dependency. Each step has a positive integer cost. The goal is to make a specified output service usable within budget, while preserving a forbidden-dependency invariant. The environment may impose identity-specific allowlists; thus quotienting by counts is generally unsound.
+## Repair model
 
-For the initial restricted fixture below, all services and available repair actions are explicitly known; therefore this is **ordinary finite deterministic planning**. It does not claim open-ended generativity.
+A dependency edge `u -> v` means that service `u` requires service `v`. The initial graph contains an operational ingress service, a failed authentication service, and an operational reporting service that depends on authentication. Recovery is defined by the reporting service becoming usable. The experimental action set is finite, deterministic and single-use.
 
-## Exact fixture
-Services: ingress (alive), auth (dead), report (alive).
-Dependency: report requires auth.
-Available actions:
-- restart_auth: cost 3, changes auth to alive.
-- create_auth_replacement: cost 2, creates distinct identity auth_v2 (alive) but does not rewire report.
-- rewire_report: cost 1, requires auth_v2 to exist, removes report->auth and adds report->auth_v2.
-Budget 3. Goal: report usable. Both restart_auth (cost 3) and create_auth_replacement+rewire_report (cost 3) are valid; the replacement alone does not solve the task. Forbidden edge ingress->report must remain absent.
+| Action | Cost | Prerequisite | Effect |
+| --- | ---: | --- | --- |
+| Restart authentication | 3 | None | Marks the existing authentication service operational |
+| Create replacement | 2 | None | Creates an operational authentication replacement with a distinct identity |
+| Rewire reporting | 1 | Replacement created | Redirects the reporting dependency from the failed authentication service to its replacement |
 
-## Why this is an adversarial gate
-- A birth-only metric wrongly rewards create_auth_replacement even when the report remains unusable.
-- Count-only abstraction cannot distinguish replacement from a dependency-correct repair.
-- Standard graph rewriting can express the changes, so no novelty is inferred.
+The global budget is 3. Restarting the original service or creating the replacement and rewiring the dependent both meet the goal at total cost 3. Creating the replacement alone does not make reporting usable. The fixture also excludes forbidden dependencies as specified in [`fixture.json`](fixture.json). A cyclic dependency is treated as unusable by the fixture oracle; this is an experimental convention rather than a general rule for dependency networks.
 
-## Requirements before any publication claim
-1. Obtain a genuine workflow/incident corpus with license, provenance and repeatable failure/recovery traces.
-2. Encode the same semantics in GROOVE, with explicit typed graph rules and identity constraints; verify trace/goal equivalence, not just similar diagrams.
-3. Compare the GoN candidate against GROOVE and an independent exact planner with identical budgets and hardware.
-4. Pre-register a nontrivial, falsifiable claim before evaluating held-out instances.
-5. If the task reduces to ordinary planning with no meaningful advantage, close the novelty gate.
+## Verification
 
-References: https://groove.cs.utwente.nl/ and https://groove.cs.utwente.nl/manual.html .
+Run from the repository root:
+
+```bash
+python applications/workflow_repair/verify_fixture.py
+python applications/workflow_repair/compare_independent_oracles.py
+python applications/workflow_repair/optimality_certificate.py
+python applications/workflow_repair/scaling_benchmark.py
+python applications/workflow_repair/decomposition_research.py
+```
+
+The exhaustive certificate considers 16 ordered subsets of the three named actions. Four pass the action-applicability and budget checks, and two reach the goal with minimum cost 3. Uniform-cost search independently recovers the same optimum.
+
+The synthetic scaling study uses independent groups of the same repair problem. For groups `n = 1, 2, 3, 4` and three deterministic action-order seeds per size, exhaustive enumeration and uniform-cost search agree on the optimal cost `3n`. Reported search-work counts are not equivalent runtime or memory measurements. The decomposition checks use eight group counts and three action-order seeds; full-state cross-checks were performed for `n <= 4`.
+
+## Model and comparison boundaries
+
+The repair fixture is not an operational incident dataset. Graph transformations can encode the same operations; the model does not claim a representational impossibility for GROOVE or other graph-rewriting systems. The repository's GROOVE translation material is a specification and baseline protocol, not an executed matched comparison for this fixture. The three-relay GROOVE grammar reported separately in the preprint is a distinct experiment and should not be conflated with a GROOVE implementation of this recovery example.
+
+The decomposition identity requires action and goal independence, with the global additive budget enforced after summing unbudgeted local optima. Shared restart capacity, cross-group dependencies or action costs that depend on other groups invalidate that decomposition certificate. Fresh-name quotient search is justified only under explicit identity-permutation equivariance. These qualifications are developed in Sections 9–13 of the deposited manuscript.
+
+## Related records
+
+- [Main repository overview](../../README.md)
+- [Research freeze and earlier verification evidence](../../research/GON_RESEARCH_FREEZE_FOR_MANUSCRIPT_2026-10-18.md)
+- [Deposited preprint V1](https://doi.org/10.5281/zenodo.23456986)
