@@ -30,13 +30,16 @@ jobs:
           assert m.count('\\begin{proposition}')==6
           print('verified 6 propositions, 4 algorithms, 4 figures, 8 tables, 23 bib keys')
           PY
-      - name: Compile exact committed manuscript with Biber
+      - name: Compile exact committed manuscript from paper directory
         run: |
-          mkdir -p build
-          pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt15_authoritative.tex
-          biber --input-directory=build --output-directory=build gon_prompt15_authoritative
-          pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt15_authoritative.tex
-          pdflatex -halt-on-error -interaction=nonstopmode -output-directory=build paper/gon_prompt15_authoritative.tex
+          cd paper
+          pdflatex -halt-on-error -interaction=nonstopmode gon_prompt15_authoritative.tex
+          biber gon_prompt15_authoritative
+          pdflatex -halt-on-error -interaction=nonstopmode gon_prompt15_authoritative.tex
+          pdflatex -halt-on-error -interaction=nonstopmode gon_prompt15_authoritative.tex
+          mkdir -p ../build
+          cp gon_prompt15_authoritative.pdf gon_prompt15_authoritative.log gon_prompt15_authoritative.blg ../build/
+          cd ..
           pdfinfo build/gon_prompt15_authoritative.pdf | grep Pages
           pdftotext build/gon_prompt15_authoritative.pdf - | grep -F 'Conclusion'
           ! grep -Eq 'LaTeX Warning: There were undefined references|Citation.*undefined' build/gon_prompt15_authoritative.log
