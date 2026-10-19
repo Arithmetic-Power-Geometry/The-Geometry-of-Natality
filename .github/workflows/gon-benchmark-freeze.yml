@@ -1,0 +1,30 @@
+name: GoN frozen benchmark protocol
+on:
+  push:
+    branches:
+      - research/gon-stage1-20261019
+    paths:
+      - 'experiments/research_gate/benchmark_v1.py'
+      - 'tests/test_benchmark_v1.py'
+      - '.github/workflows/gon-benchmark-freeze.yml'
+  workflow_dispatch:
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile
+        run: python -m py_compile experiments/research_gate/benchmark_v1.py tests/test_benchmark_v1.py
+      - name: Determinism and mutation tests
+        run: python -m unittest discover -s tests -p test_benchmark_v1.py -v
+      - name: Export frozen manifest
+        run: python -m experiments.research_gate.benchmark_v1 > benchmark_v1_manifest.json
+      - name: Upload manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-frozen-benchmark-v1
+          path: benchmark_v1_manifest.json
