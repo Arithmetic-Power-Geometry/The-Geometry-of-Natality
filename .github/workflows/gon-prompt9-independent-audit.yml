@@ -1,0 +1,70 @@
+name: GoN independent audit and resource-limited rerun
+on:
+  push:
+    branches:
+      - research/gon-stage1-20261019
+    paths:
+      - 'experiments/research_gate/benchmark_trial_worker.py'
+      - 'experiments/research_gate/benchmark_runner_isolated.py'
+      - 'experiments/research_gate/independent_benchmark_audit.py'
+      - 'tests/test_prompt9_audit.py'
+      - '.github/workflows/gon-prompt9-independent-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile and independent audit tests
+        run: |
+          python -m py_compile experiments/research_gate/benchmark_trial_worker.py experiments/research_gate/benchmark_runner_isolated.py experiments/research_gate/independent_benchmark_audit.py
+          python -m unittest discover -s tests -p test_prompt9_audit.py -v
+      - name: Retrieve original Prompt 8 raw data from successful run
+        uses: actions/download-artifact@v4
+        with:
+          name: gon-prompt8-matched-results
+          run-id: 39207537034
+          github-token: ${{ github.token }}
+          path: original
+      - name: Independently audit original 1440 trials and render figure
+        run: |
+          python -m experiments.research_gate.independent_benchmark_audit --input original/prompt8_results.json --output prompt8_independent_audit.json --figure prompt8_paired_differences.svg
+      - name: Rerun frozen 72 cells with isolated resource-limited workers
+        run: |
+          python -m experiments.research_gate.benchmark_runner_isolated --repetitions 20 --warmup 3 --output prompt9_results.json
+      - name: Independently audit rerun and render figure
+        run: |
+          python -m experiments.research_gate.independent_benchmark_audit --input prompt9_results.json --output prompt9_independent_audit.json --figure prompt9_paired_differences.svg --allow-censored
+      - name: Verify counts and enforcement policy
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('prompt9_results.json'))
+          a=json.load(open('prompt9_independent_audit.json'))
+          assert d['counts']['matched_cells']==36
+          assert d['counts']['negative_control_cells']==36
+          assert d['counts']['measured_trials']==1440
+          assert a['audited_trials']==1440
+          assert d['resource_policy']['timeout_seconds']==60
+          assert d['resource_policy']['address_space_bytes']==2*1024**3
+          print('PASS',d['counts'])
+          PY
+      - name: Upload audited raw evidence and figures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt9-independent-audit
+          path: |
+            prompt8_independent_audit.json
+            prompt8_paired_differences.svg
+            prompt9_results.json
+            prompt9_independent_audit.json
+            prompt9_paired_differences.svg
+          if-no-files-found: warn
