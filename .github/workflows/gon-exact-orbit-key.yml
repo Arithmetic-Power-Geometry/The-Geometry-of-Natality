@@ -5,6 +5,7 @@ on:
       - research/gon-stage1-20261019
     paths:
       - 'experiments/research_gate/exact_orbit_key.py'
+      - 'experiments/research_gate/fresh_name_quotient_prototype.py'
       - 'tests/test_exact_orbit_key.py'
       - '.github/workflows/gon-exact-orbit-key.yml'
   workflow_dispatch:
@@ -21,6 +22,8 @@ jobs:
         run: |
           python --version
           git rev-parse HEAD
-          python -m py_compile experiments/research_gate/exact_orbit_key.py tests/test_exact_orbit_key.py
+          python -m py_compile experiments/research_gate/exact_orbit_key.py experiments/research_gate/fresh_name_quotient_prototype.py tests/test_exact_orbit_key.py
+      - name: Legacy demo smoke check
+        run: python experiments/research_gate/fresh_name_quotient_prototype.py
       - name: Exhaustive orbit equivalence tests
         run: python -m unittest discover -s tests -p test_exact_orbit_key.py -v
