@@ -2,7 +2,7 @@ import itertools
 import unittest
 from experiments.research_gate.footprint_certificate import (
     Component,Problem,certificate,footprint,full_ucs,decomposed,
-    replay,coupling_counterexample)
+    replay,coupling_counterexample,exhaustive_global)
 
 class FootprintTests(unittest.TestCase):
     def test_exhaustive_matched_optimality(self):
@@ -17,6 +17,8 @@ class FootprintTests(unittest.TestCase):
                 self.assertTrue(c["certified"],c["reasons"])
                 d=decomposed(p);f=full_ucs(p)
                 self.assertEqual(d["cost"],f["cost"])
+                if n<=2:
+                    self.assertEqual(d["cost"],exhaustive_global(p)["cost"])
                 if d["cost"] is not None:
                     self.assertEqual(replay(p,d["plan"]),d["cost"])
                 cases+=1
@@ -49,6 +51,7 @@ class FootprintTests(unittest.TestCase):
         p=Problem((Component(forbid_restart=True,forbid_create=True),))
         self.assertIsNone(decomposed(p)["cost"])
         self.assertIsNone(full_ucs(p)["cost"])
+        self.assertIsNone(exhaustive_global(p)["cost"])
         p=Problem((Component(forbid_restart=True,create=0,rewire=0,
                              require_create_history=True),))
         self.assertEqual(decomposed(p)["cost"],0)
