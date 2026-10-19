@@ -16,7 +16,7 @@ Standard Dijkstra uniform-cost search is optimal on a finite nonnegative weighte
 \[C^*=\sum_{i=1}^{n}C_i^*.\]
 An external budget B permits a solution iff the sum is at most B. This is standard separability, not a novel theorem.
 \section{Falsified conjectures and standard lemma}
-Shared restart capacity invalidates naive additivity: two components with restart cost 1 and create-plus-rewire cost 3 each have unconstrained optimum sum 2, but at most one restart gives optimum 4. Selecting the lowest absolute restart cost can fail: restart/alternative pairs (1,1) and (2,4), with one restart, give cost 5 if the first is restarted but 3 if the second is restarted. For independent binary choices with at most k restarts, set d_i=q_i-r_i. The optimal cost is
+Shared restart capacity invalidates naive additivity: two components with restart cost 1 and create-plus-rewire cost 3 each have unconstrained optimum sum 2, but at most one restart gives optimum 4. Selecting the lowest absolute restart cost can fail: restart/alternative pairs (1,1) and (2,4), with one restart, give cost 5 if the first is restarted but 3 if the second is restarted. For independent binary choices with at most k restarts, set $d_i=q_i-r_i$. The optimal cost is
 \[C^*=\sum_iq_i-\sum_{j=1}^{\min(k,m)}d^+_{(j)},\]
 where the latter are the descending positive savings. An exchange argument proves this standard cardinality-greedy lemma, implemented by sorting in O(n log n). Deterministic exhaustive checks covered 80,973 parameter cases.
 \section{Frozen synthetic benchmark}
