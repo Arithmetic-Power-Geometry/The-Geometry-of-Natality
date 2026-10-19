@@ -8,6 +8,8 @@ on:
       - 'paper/gon_prompt15_references.bib'
       - '.github/workflows/gon-prompt15-authoritative.yml'
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   manuscript:
     runs-on: ubuntu-latest
@@ -48,6 +50,19 @@ jobs:
           mkdir -p build/pages
           pdftoppm -f 1 -l 30 -r 90 -png build/gon_prompt15_authoritative.pdf build/pages/page >/dev/null 2>&1
           test "$(find build/pages -name '*.png' | wc -l)" -ge 14
+      - name: Commit exact compiled authoritative PDF to research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp build/gon_prompt15_authoritative.pdf paper/gon_prompt16_authoritative.pdf
+          sha256sum paper/gon_prompt16_authoritative.pdf | tee build/committed-pdf-sha256.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add paper/gon_prompt16_authoritative.pdf
+          if ! git diff --cached --quiet; then
+            git commit -m "Prompt 16: commit CI-compiled 14-page authoritative manuscript PDF"
+            git push origin HEAD:research/gon-stage1-20261019
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: gon-prompt15-authoritative-pdf-and-renders
@@ -56,3 +71,4 @@ jobs:
             build/gon_prompt15_authoritative.log
             build/gon_prompt15_authoritative.blg
             build/pages/*.png
+            build/committed-pdf-sha256.txt
