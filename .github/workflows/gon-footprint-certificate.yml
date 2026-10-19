@@ -1,0 +1,32 @@
+name: GoN conservative footprint certificate
+on:
+  push:
+    branches:
+      - research/gon-stage1-20261019
+    paths:
+      - 'experiments/research_gate/footprint_certificate.py'
+      - 'tests/test_footprint_certificate.py'
+      - '.github/workflows/gon-footprint-certificate.yml'
+  workflow_dispatch:
+jobs:
+  certificate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile
+        run: python -m py_compile experiments/research_gate/footprint_certificate.py tests/test_footprint_certificate.py
+      - name: Exact decomposition and counterexample tests
+        run: python -m unittest discover -s tests -p test_footprint_certificate.py -v
+      - name: Produce machine-readable benchmark evidence
+        run: python -m experiments.research_gate.footprint_certificate > experiments/research_gate/prompt5_footprint_results.json
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gon-prompt5-footprint-evidence
+          path: experiments/research_gate/prompt5_footprint_results.json
+          if-no-files-found: warn
