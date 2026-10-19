@@ -129,6 +129,8 @@ def search(g,quotient=False):
         expanded+=1
         if goal(s,g):
             replay(g,path,cost)
+            from experiments.research_gate.independent_replay import verify
+            verify(g,path,cost)
             return dict(cost=cost,plan=path,expanded=expanded,generated=generated,
                         distinct=len(dist),canonical_calls=calls,canonical_seconds=key_seconds)
         for a,w in actions(s,g):
