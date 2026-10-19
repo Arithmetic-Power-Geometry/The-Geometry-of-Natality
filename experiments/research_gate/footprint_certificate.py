@@ -190,6 +190,24 @@ def decomposed(p):
             "local_costs":tuple(cost for cost,_ in local),
             "certificate_seconds":perf_counter()-start_time}
 
+def exhaustive_global(p):
+    """Independent trace-tree DFS; no UCS/distance map; bounded small DSL."""
+    validate(p)
+    stack=[(initial(p),0,())]
+    best=None;best_plan=();visits=0
+    while stack:
+        state,cost,plan=stack.pop();visits+=1
+        if finished(state):
+            if best is None or cost<best:
+                best,best_plan=cost,plan
+            continue
+        for a,w,t in successors(p,state):
+            if cost+w<=p.budget:
+                stack.append((t,cost+w,plan+(a,)))
+    if best is not None:
+        assert replay(p,best_plan)==best
+    return {"cost":best,"plan":best_plan,"visits":visits}
+
 def coupling_counterexample():
     p=Problem((Component(restart=1,create=2,rewire=1),
                Component(restart=1,create=2,rewire=1)),shared_restart_limit=1)
