@@ -56,9 +56,11 @@ def make_grammar():
         rules[f"link{i}"]=edges
         rules[f"unlink{i}"]=[("n"+str(i),"n"+str(i),"Relay"+str(i)),
                 ("n"+str(i),"n"+str(i),"live"),
+                ("t"+str(i),"t"+str(i),"Terminal"+str(i)),
                 ("n"+str(i),"t"+str(i),"del:linked")]
         rules[f"delete{i}"]=[("n"+str(i),"n"+str(i),"Relay"+str(i)),
                 ("n"+str(i),"n"+str(i),"del:live"),
+                ("t"+str(i),"t"+str(i),"Terminal"+str(i)),
                 ("n"+str(i),"t"+str(i),"not:linked")]
     rules["delete0"]=[("n0","n0","Relay0"),("n0","n0","del:live")]
     for name,edges in sorted(rules.items()):
